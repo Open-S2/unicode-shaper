@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import WASM, { DEFAULT_OPTIONS_WITHOUT_BIDI_SHAPING } from '../lib/index.js'
 
-describe ('many different string cases', () => {
+describe('many different string cases', () => {
   const wasm = new WASM()
   test('empty string', () => {
     expect(wasm.shapeString('')).toEqual('')
