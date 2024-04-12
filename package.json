@@ -1,0 +1,61 @@
+{
+  "name": "unicode-shaper-rust",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Shape unicode text so that renderers like WebGL and WebGPU can properly display the glyphs.",
+  "keywords": [
+    "unicode",
+    "parser",
+    "shaper",
+    "Rust",
+    "LTR",
+    "Left to Right Text"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "directories": {
+    "lib": "dist"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typescript": {
+    "main": "lib/index.ts"
+  },
+  "files": ["dist", "lib"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Open-S2/unicode-parser-rust.git"
+  },
+  "author": "Craig OConnor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Open-S2/unicode-parser-rust/issues"
+  },
+  "homepage": "https://github.com/Open-S2/unicode-parser-rust#readme",
+  "devDependencies": {
+    "@skypack/package-check": "^0.2.2",
+    "@typescript-eslint/parser": "latest",
+    "bun-types": "^1.1.3",
+    "eslint": "^8.44.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-config-standard-with-typescript": "^36.0.0",
+    "ts-standard": "*",
+    "typescript": "latest"
+  },
+  "scripts": {
+    "build": "bun run build:rust && bun run build:ts",
+    "build:ts": "rm -rf dist && mkdir dist && bun build.ts",
+    "build:rust": "bun build:rust:cargo && bun build:rust:optimize && bun build:rust:strip",
+    "build:rust:cargo": "cargo build --target wasm32-unknown-unknown --release",
+    "build:rust:optimize": "wasm-opt -O3 -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_rust.wasm",
+    "build:rust:strip": "wasm-strip target/wasm32-unknown-unknown/release/optimized.wasm",
+    "lint": "eslint lib/",
+    "lint:fix": "eslint lib/ --fix",
+    "types": "tsc --project tsconfig.types.json",
+    "prepare": "bun run lint && bun run build && bun run test && bun run types",
+    "package-check": "package-check",
+    "test": "cargo test && bun test",
+    "test:dev": "bun test --watch"
+  }
+}
