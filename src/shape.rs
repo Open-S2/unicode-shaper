@@ -45,6 +45,8 @@ pub fn shape_unicode(
         // arabic shaping
         output = shape_arabic(&output, options);
         // Myanmar shaping
+        shape_buginese(&mut output);
+        // Myanmar shaping
         shape_myanmar(&mut output);
         // tibetan
         shape_tibetan(&mut output);
@@ -177,6 +179,19 @@ mod tests {
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         let result: &[u16] = &shape_unicode(&input_utf16_slice, &DEFAULT_OPTIONS);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn buginese_test() {
+        let input = "ᨑᨗ ᨍᨍᨗᨕᨂᨗ";
+        let expected: &[u16] = &[6679, 6673, 32, 6679, 6669, 6669, 6679, 6677, 6658];
+        // Encode the string as UTF-16 and obtain a slice of u16 values
+        let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
+        // Create a reference to the slice
+        let input_utf16_ref: &[u16] = &input_utf16_slice;
+        
+        let result: &[u16] = &shape_unicode(input_utf16_ref, &DEFAULT_OPTIONS);
         assert_eq!(result, expected);
     }
 }
