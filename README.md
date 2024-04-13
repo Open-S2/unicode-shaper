@@ -116,7 +116,7 @@ g++ -stdlib=libc++ -std=c++20 -w -fPIC -I/usr/local/include -L/usr/local/lib -li
 [ ] [Javanese](https://learn.microsoft.com/en-us/typography/script-development/javanese)
 [ ] [Khmer](https://learn.microsoft.com/en-us/typography/script-development/khmer)
 [ ] [Lao](https://learn.microsoft.com/en-us/typography/script-development/lao)
-[ ] [Myanmar](https://learn.microsoft.com/en-us/typography/script-development/myanmar)
+[x] [Myanmar](https://learn.microsoft.com/en-us/typography/script-development/myanmar)
 [ ] [Sinhala](https://learn.microsoft.com/en-us/typography/script-development/sinhala)
 [ ] [Syric](https://learn.microsoft.com/en-us/typography/script-development/syriac)
 [ ] [Thaana](https://learn.microsoft.com/en-us/typography/script-development/thaana)
