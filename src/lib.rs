@@ -1,4 +1,4 @@
-#![no_std]
+// #![no_std]
 
 extern crate alloc;
 #[cfg(target_arch = "wasm32")]
@@ -10,6 +10,7 @@ use core::mem;
 pub use ubidi_internal::*;
 // Export all public items from shapes
 pub use shape_arabic::*;
+pub use shape_buginese::*;
 pub use shape_internal::*;
 pub use shape_myanmar::*;
 pub use shape_tibetan::*;
@@ -19,6 +20,7 @@ pub use ubidi::*;
 
 // Declare the modules
 mod shape_arabic;
+mod shape_buginese;
 mod shape_internal;
 mod shape_myanmar;
 mod shape_tibetan;

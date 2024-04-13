@@ -21,94 +21,103 @@ const WHITESPACE: u16 =
     0x000C | // Form feed
     0x0085 | // Next line
     0x3000 | // ideographic space
-    0x200B; // Zero width space
+    0x200B | // Zero width space
+    0x00A0 | // NO-BREAK SPACE
+    0x202F | // NARROW NO-BREAK SPACE
+    0x2060 | // WORD JOINER
+    0xFEFF; // ZERO WIDTH NO-BREAK SPACE
 
 #[derive(Debug, Clone, PartialEq)]
 enum MType {
     A, // Anusvara class (1032, 1036)
-    As, // Asat (103A)
+    // As, // Asat (103A)
     C, // Consonants and Independent vowels (1000-1020, 103F, 104E, 1050, 1051, 105A-105D, 1061, 1065, 1066, 106E-1070, 1075-1081, 108E, AA60-AA6F, AA71-AA76, AA7A)
-    D, // Myanmar digits except zero (1041-1049, 1090-1099)
-    D0, // Myanmar digit zero (1040)
-    DB, // Dot below (1037)
-    GB, // Generic base characters (00A0, 00D7, 2012–2015, 2022, 25CC, 25FB–25FE)
-    H, // Halant/virama (1039)
-    IV, // Independent vowel (1021-102A, 1052-1055)
-    J, // Joiners (200C, 200D)
+    // D, // Myanmar digits except zero (1041-1049, 1090-1099)
+    // D0, // Myanmar digit zero (1040)
+    // DB, // Dot below (1037)
+    // GB, // Generic base characters (00A0, 00D7, 2012–2015, 2022, 25CC, 25FB–25FE)
+    // H, // Halant/virama (1039)
+    // IV, // Independent vowel (1021-102A, 1052-1055)
+    // J, // Joiners (200C, 200D)
     K, // A Kinzi sequence of three characters (<1004 | 101B | 105A>, 103A, 1039)
-    MH, // Medial consonants Ha, Mon La (103E, 1060)
+    // MH, // Medial consonants Ha, Mon La (103E, 1060)
     MR, // Medial consonants Ra (103C)
-    MW, // Medial consonants Wa, Shan Wa (103D, 1082)
-    MY, // Medial consonants Ya, Mon Na, Mon Ma (103B, 105E, 105F)
+    // MW, // Medial consonants Wa, Shan Wa (103D, 1082)
+    // MY, // Medial consonants Ya, Mon Na, Mon Ma (103B, 105E, 105F)
     O, // SCRIPT_COMMON characters in a Myanmar run
-    P, // Punctuation (104A, 104B)
-    PT, // Pwo and other tones (1063, 1064, 1069-106D, AA7B)
-    R, // Reserved characters from the Myanmar Extended-A block (AA7C-AA7F) & Extended-B block (A9E0-A9FF)
-    S, // Symbols (104C, 104D, 104F, 109E, 109F, AA70, AA77-AA79)
-    V, // Visarga and Shan tones (1038, 1087-108D, 108F, 109A-109C)
-    VAbv, // Above base dependent vowel (102D, 102E, 1033-1035, 1071-1074, 1085, 1086, 109D)
+    // P, // Punctuation (104A, 104B)
+    // PT, // Pwo and other tones (1063, 1064, 1069-106D, AA7B)
+    // R, // Reserved characters from the Myanmar Extended-A block (AA7C-AA7F) & Extended-B block (A9E0-A9FF)
+    // S, // Symbols (104C, 104D, 104F, 109E, 109F, AA70, AA77-AA79)
+    // V, // Visarga and Shan tones (1038, 1087-108D, 108F, 109A-109C)
+    // VAbv, // Above base dependent vowel (102D, 102E, 1033-1035, 1071-1074, 1085, 1086, 109D)
     VBlw, // Below base dependent vowel (102F, 1030, 1058, 1059)
     VPre, // Pre base dependent vowel (1031, 1084)
-    VPst, // Post base dependent vowel (102B, 102C, 1056, 1057, 1062, 1067, 1068, 1083)
-    VS, // Variation selectors (FE00–FE0F)
-    WJ, // Word joiner (2060)
+    // VPst, // Post base dependent vowel (102B, 102C, 1056, 1057, 1062, 1067, 1068, 1083)
+    // VS, // Variation selectors (FE00–FE0F)
+    // WJ, // Word joiner (2060)
     WS, // Whitespace (0020, 0009, 000A, 000D, 000C, 0085, 3000, 200B)
 }
 impl MType {
     // note: isSpecialSequence is for K, if true, '103A, 1039' come after c
     fn from_u16(c: &u16, may_be_kinzi_sequence: bool) -> MType {
-        if may_be_kinzi_sequence { return MType::K }
+        if may_be_kinzi_sequence {
+            return match c {
+                0x1004 | 0x101B | 0x105A => MType::K,
+                _ => Self::from_u16(c, false)
+            }
+        }
         match c {
             // Anusvara class (1032, 1036)
             0x1032 | 0x1036 => MType::A,
-            // Asat (103A)
-            0x103A => MType::As,
+            // // Asat (103A)
+            // 0x103A => MType::As,
             // Consonants and Independent vowels (1000-1020, 103F, 104E, 1050, 1051, 105A-105D, 1061, 1065, 1066, 106E-1070, 1075-1081, 108E, AA60-AA6F, AA71-AA76, AA7A)
             0x1000..=0x1020 | 0x103F | 0x104E | 0x01050 | 0x01051 | 0x105A..=0x105D | 0x1061 | 0x1065 | 0x1066 | 0x106E..=0x1070 | 0x1075..=0x1081 | 0x108E | 0xAA60..=0xAA6F | 0xAA71..=0xAA76 | 0xAA7A => MType::C,
-            // Myanmar digits except zero (1041-1049, 1090-1099)
-            0x1041..=0x1049 | 0x1090..=0x1099 => MType::D,
-            // Myanmar digit zero (1040)
-            0x1040 => MType::D0,
-            // Dot below (1037)
-            0x1037 => MType::DB,
-            // Generic base characters (00A0, 00D7, 2012–2015, 2022, 25CC, 25FB–25FE)
-            0x00A0 | 0x00D7 | 0x2012..=0x2015 | 0x2022 | 0x25CC | 0x25FB..=0x25FE => MType::GB,
-            // Halant/virama (1039)
-            0x1039 => MType::H,
-            // Independent vowel (1021-102A, 1052-1055)
-            0x1021..=0x102A | 0x1052..=0x1055 => MType::IV,
-            // Joiners (200C, 200D)
-            0x200C | 0x200D => MType::J,
-            // Medial consonants Ha, Mon La (103E, 1060)
-            0x103E | 0x1060 => MType::MH,
+            // // Myanmar digits except zero (1041-1049, 1090-1099)
+            // 0x1041..=0x1049 | 0x1090..=0x1099 => MType::D,
+            // // Myanmar digit zero (1040)
+            // 0x1040 => MType::D0,
+            // // Dot below (1037)
+            // 0x1037 => MType::DB,
+            // // Generic base characters (00A0, 00D7, 2012–2015, 2022, 25CC, 25FB–25FE)
+            // 0x00A0 | 0x00D7 | 0x2012..=0x2015 | 0x2022 | 0x25CC | 0x25FB..=0x25FE => MType::GB,
+            // // Halant/virama (1039)
+            // 0x1039 => MType::H,
+            // // Independent vowel (1021-102A, 1052-1055)
+            // 0x1021..=0x102A | 0x1052..=0x1055 => MType::IV,
+            // // Joiners (200C, 200D)
+            // 0x200C | 0x200D => MType::J,
+            // // Medial consonants Ha, Mon La (103E, 1060)
+            // 0x103E | 0x1060 => MType::MH,
             // Medial consonants Ra (103C)
             0x103C => MType::MR,
-            // Medial consonants Wa, Shan Wa (103D, 1082)
-            0x103D | 0x1082 => MType::MW,
-            // Medial consonants Ya, Mon Na, Mon Ma (103B, 105E, 105F)
-            0x103B | 0x105E | 0x105F => MType::MY,
-            // Punctuation (104A, 104B)
-            0x104A | 0x104B => MType::P,
-            // Pwo and other tones (1063, 1064, 1069-106D, AA7B)
-            0x1063 | 0x1064 | 0x1069..=0x106D | 0xAA7B => MType::PT,
-            // Reserved characters from the Myanmar Extended-A block (AA7C-AA7F) & Extended-B block (A9E0-A9FF)
-            0xAA7C..=0xAA7F | 0xA9E0..=0xA9FF => MType::R,
-            // Symbols (104C, 104D, 104F, 109E, 109F, AA70, AA77-AA79)
-            0x104C | 0x104D | 0x104F | 0x109E | 0x109F | 0xAA70 | 0xAA77..=0xAA79 => MType::S,
-            // Visarga and Shan tones (1038, 1087-108D, 108F, 109A-109C)
-            0x1038 | 0x1087..=0x108D | 0x108F | 0x109A..=0x109C => MType::V,
-            // Above base dependent vowel (102D, 102E, 1033-1035, 1071-1074, 1085, 1086, 109D)
-            0x102D | 0x102E | 0x1033..=0x1035 | 0x1071..=0x1074 | 0x1085 | 0x1086 | 0x109D => MType::VAbv,
+            // // Medial consonants Wa, Shan Wa (103D, 1082)
+            // 0x103D | 0x1082 => MType::MW,
+            // // Medial consonants Ya, Mon Na, Mon Ma (103B, 105E, 105F)
+            // 0x103B | 0x105E | 0x105F => MType::MY,
+            // // Punctuation (104A, 104B)
+            // 0x104A | 0x104B => MType::P,
+            // // Pwo and other tones (1063, 1064, 1069-106D, AA7B)
+            // 0x1063 | 0x1064 | 0x1069..=0x106D | 0xAA7B => MType::PT,
+            // // Reserved characters from the Myanmar Extended-A block (AA7C-AA7F) & Extended-B block (A9E0-A9FF)
+            // 0xAA7C..=0xAA7F | 0xA9E0..=0xA9FF => MType::R,
+            // // Symbols (104C, 104D, 104F, 109E, 109F, AA70, AA77-AA79)
+            // 0x104C | 0x104D | 0x104F | 0x109E | 0x109F | 0xAA70 | 0xAA77..=0xAA79 => MType::S,
+            // // Visarga and Shan tones (1038, 1087-108D, 108F, 109A-109C)
+            // 0x1038 | 0x1087..=0x108D | 0x108F | 0x109A..=0x109C => MType::V,
+            // // Above base dependent vowel (102D, 102E, 1033-1035, 1071-1074, 1085, 1086, 109D)
+            // 0x102D | 0x102E | 0x1033..=0x1035 | 0x1071..=0x1074 | 0x1085 | 0x1086 | 0x109D => MType::VAbv,
             // Below base dependent vowel (102F, 1030, 1058, 1059)
             0x102F | 0x1030 | 0x1058 | 0x1059 => MType::VBlw,
             // Pre base dependent vowel (1031, 1084)
             0x1031 | 0x1084 => MType::VPre,
-            // Post base dependent vowel (102B, 102C, 1056, 1057, 1062, 1067, 1068, 1083)
-            0x102B | 0x102C | 0x1056 | 0x1057 | 0x1062 | 0x1067 | 0x1068 | 0x1083 => MType::VPst,
-            // Variation selectors (FE00–FE0F)
-            0xFE00..=0xFE0F => MType::VS,
-            // Word joiner (2060)
-            0x2060 => MType::WJ,
+            // // Post base dependent vowel (102B, 102C, 1056, 1057, 1062, 1067, 1068, 1083)
+            // 0x102B | 0x102C | 0x1056 | 0x1057 | 0x1062 | 0x1067 | 0x1068 | 0x1083 => MType::VPst,
+            // // Variation selectors (FE00–FE0F)
+            // 0xFE00..=0xFE0F => MType::VS,
+            // // Word joiner (2060)
+            // 0x2060 => MType::WJ,
             // Whitespace (0020, 0009, 000A, 000D, 000C, 0085, 3000, 200B)
             &WHITESPACE => MType::WS,
             _ => MType::O,
@@ -155,7 +164,7 @@ impl <'a> Cluster<'a> {
         Self { defs, whitespace }
     }
 
-    fn split_by_ws(defs: &'a [Definition<'a>]) -> Vec<Cluster<'a>> {
+    fn build_clusters(defs: &'a [Definition<'a>]) -> Vec<Cluster<'a>> {
         let mut clusters = Vec::new();
 
         let mut def_idx = 0;
@@ -206,7 +215,6 @@ impl <'a> Cluster<'a> {
                     // Pre-base vowels (VPre) are reordered to the start of the syllable cluster.
                     let v_pre = self.defs.remove(idx);
                     self.defs.insert(0, v_pre);
-                    idx -= 1;
                 },
                 MType::A => {
                     // Anusvara (A) coming immediately after one or more below-base vowels (VBlw)
@@ -262,7 +270,7 @@ pub fn shape_myanmar(input: &mut [u16]) {
     // Step 1: Convert input to clusters
     let defs = Definition::build_from_unicodes(input);
     // Step 2: Split clusters by WS (white space)
-    let mut clusters_sets = Cluster::split_by_ws(&defs);
+    let mut clusters_sets = Cluster::build_clusters(&defs);
     // Step 2: Reorder the clusters and add them to result
     clusters_sets.iter_mut().for_each(|c| {
         res.append(&mut c.get_sorted());

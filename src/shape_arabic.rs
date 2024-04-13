@@ -1,7 +1,6 @@
 use alloc::vec::Vec;
 
 use crate::*;
-
 use core::cmp::max;
 
 // enum ShapeError {

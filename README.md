@@ -88,7 +88,6 @@ CXXFLAGS=-std=c++20 ./runConfigureICU Linux/gcc --disable-renaming
 make clean
 make -j4
 sudo make install
-
 ```
 
 ### 2 Run comparison experiments via test.cpp
@@ -102,7 +101,7 @@ g++ -stdlib=libc++ -std=c++20 -w -fPIC -I/usr/local/include -L/usr/local/lib -li
 [x] [Standard (Latin, Cyrillic, Greek, etc.)](https://learn.microsoft.com/en-us/typography/script-development/standard)
 [x] [Arabic](https://learn.microsoft.com/en-us/typography/script-development/arabic)
 [ ] [Buginese](https://learn.microsoft.com/en-us/typography/script-development/buginese)
-[ ] [Hangul](https://learn.microsoft.com/en-us/typography/script-development/hangul)
+[x] [Hangul](https://learn.microsoft.com/en-us/typography/script-development/hangul)
 [x] [Hebrew](https://learn.microsoft.com/en-us/typography/script-development/hebrew)
 [ ] [Indic: Bengali](https://learn.microsoft.com/en-us/typography/script-development/bengali)
 [ ] [Indic: Devanagari](https://learn.microsoft.com/en-us/typography/script-development/devanagari)
@@ -115,10 +114,10 @@ g++ -stdlib=libc++ -std=c++20 -w -fPIC -I/usr/local/include -L/usr/local/lib -li
 [ ] [Indic: Telugu](https://learn.microsoft.com/en-us/typography/script-development/telugu)
 [ ] [Javanese](https://learn.microsoft.com/en-us/typography/script-development/javanese)
 [ ] [Khmer](https://learn.microsoft.com/en-us/typography/script-development/khmer)
-[ ] [Lao](https://learn.microsoft.com/en-us/typography/script-development/lao)
+[x] [Lao](https://learn.microsoft.com/en-us/typography/script-development/lao)
 [x] [Myanmar](https://learn.microsoft.com/en-us/typography/script-development/myanmar)
 [ ] [Sinhala](https://learn.microsoft.com/en-us/typography/script-development/sinhala)
-[ ] [Syric](https://learn.microsoft.com/en-us/typography/script-development/syriac)
-[ ] [Thaana](https://learn.microsoft.com/en-us/typography/script-development/thaana)
-[ ] [Thai](https://learn.microsoft.com/en-us/typography/script-development/thai)
+[x] [Syric](https://learn.microsoft.com/en-us/typography/script-development/syriac)
+[x] [Thaana](https://learn.microsoft.com/en-us/typography/script-development/thaana)
+[x] [Thai](https://learn.microsoft.com/en-us/typography/script-development/thai)
 [x] [Tibetan](https://learn.microsoft.com/en-us/typography/script-development/tibetan)
