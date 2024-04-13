@@ -44,14 +44,16 @@ pub fn shape_unicode(
     if options & U_SHAPE_LETTERS_MASK != 0 {
         // arabic shaping
         output = shape_arabic(&output, options);
-        // Myanmar shaping
+        // Buginese shaping
         shape_buginese(&mut output);
+        // Javanese shaping
+        shape_javanese(&mut output);
         // Myanmar shaping
         shape_myanmar(&mut output);
-        // tibetan
-        shape_tibetan(&mut output);
-        // tamil
+        // Tamil shaping
         shape_tamil(&mut output);
+        // Tibetan shaping
+        shape_tibetan(&mut output);
         // khmer
         // shape_khmer(&mut output);
     }
@@ -186,6 +188,19 @@ mod tests {
     fn buginese_test() {
         let input = "ᨑᨗ ᨍᨍᨗᨕᨂᨗ";
         let expected: &[u16] = &[6673, 6679, 32, 6669, 6669, 6679, 6677, 6658, 6679];
+        // Encode the string as UTF-16 and obtain a slice of u16 values
+        let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
+        // Create a reference to the slice
+        let input_utf16_ref: &[u16] = &input_utf16_slice;
+        
+        let result: &[u16] = &shape_unicode(input_utf16_ref, &DEFAULT_OPTIONS);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn javanese_test() {
+        let input = "ꦧꦺꦲꦏ꧀ꦠꦸꦩꦿꦥ꧀ꦲ";
+        let expected: &[u16] = &[43450, 43431, 43442, 43407, 43456, 43424, 43448, 43433, 43455, 43429, 43456, 43442];
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         // Create a reference to the slice

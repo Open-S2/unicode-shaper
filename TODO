@@ -1,10 +1,10 @@
 [x] Buginese
-[ ] Javanese
+[x] Javanese
 [ ] Khmer
 [ ] Sinhala
 [ ] all Indic scripts
 
-// TODO: Copy Buginese for all the other existing shaping: 
+// TODO: Copy Buginese for all the other existing shaping (javanese is fine): 
 // * fix joiner
 // * add non-joiner
 // * ensure whitespace is correct

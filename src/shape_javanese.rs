@@ -1,10 +1,9 @@
-// https://www.unicode.org/charts/PDF/U1A00.pdf
-
+// https://www.unicode.org/charts/PDF/UA980.pdf
 use alloc::vec::Vec;
 
-pub fn is_buginese(c: &u16) -> bool {
-    // main 1A00–1A1F
-    *c >= 0x1A00 && *c <= 0x1A1F
+pub fn is_javanese(c: &u16) -> bool {
+    // A980–A9DF
+    *c >= 0xA980 && *c <= 0xA9DF
 }
 
 const WHITESPACE: u16 =
@@ -23,16 +22,23 @@ const WHITESPACE: u16 =
 
 #[derive(Debug, Clone, PartialEq)]
 enum MType {
-    C, // Consonants (1A00-1A16)
+    C, // Consonants (A984, A989–A98B, A98F–A9B2)
     GB, // Generic base characters (00A0, 00D7, 2012–2015, 2022, 25CC, 25FB–25FE)
+    H, // Halant/virama (A9C0)
+    IV, // Independent vowel (A985–A988, A98C–A98E)
     J, // Joiners (200D ZWJ (Zero Width Joiner) & 034F CGJ (COMBINING GRAPHEME JOINER))
-    O, // SCRIPT_COMMON characters in a Buginese run
-    R, // Reserved characters from the Buginese block (1A1C, 1A1D)
-    S, // Symbols (1A1E, 1A1F, A9CF)
-    VAbv, // Above base dependent vowel (1A17, 1A1B)
-    VBlw, // Below base dependent vowel (1A18)
-    VPre, // Pre base dependent vowel (1A19)
-    VPst, // Post base dependent vowel (1A1A)
+    M, // Modifiers (A980–A983)
+    MR, // Medial consonants Ra (A9BF)
+    MY, // Medial consonant Ya (A9BE)
+    N, // Nukta/Cecak Telu (A9B3)
+    O, // SCRIPT_COMMON characters in a Javanese run
+    P, // Punctuation (A9C1–A9CD)
+    R, // Reserved characters from the Javanese block (A9CE, A9DA–A9DD)
+    S, // Symbols (A9CF, A9DE, A9DF)
+    VAbv, // Above base dependent vowel (A9B6, A9B7, A9BC)
+    VBlw, // Below base dependent vowel (A9B8, A9B9)
+    VPre, // Pre base dependent vowel (A9BA, A9BB)
+    VPst, // Post base dependent vowel (A9B4, A9B5, A9BD)
     VS, // Variation selectors (FE00–FE0F)
     WJ, // Word joiner (2060)
     NJ, // Non-joiner (200C) [Zero Width Non-Joiner]
@@ -42,24 +48,38 @@ impl MType {
     // note: isSpecialSequence is for K, if true, '103A, 1039' come after c
     fn from_u16(c: &u16) -> MType {
         match c {
-            // Consonants (1A00-1A16)
-            0x1A00..=0x1A16 => MType::C,
+            // Consonants (A984, A989–A98B, A98F–A9B2)
+            0xA984 | 0xA989..=0xA98B | 0xA98F..=0xA9B2 => MType::C,
             // Generic base characters (00A0, 00D7, 2012–2015, 2022, 25CC, 25FB–25FE)
             0x00A0 | 0x00D7 | 0x2012..=0x2015 | 0x2022 | 0x25CC | 0x25FB..=0x25FE => MType::GB,
+            // Halant/virama (A9C0)
+            0xA9C0 => MType::H,
+            // Independent vowel (A985–A988, A98C–A98E)
+            0xA985..=0xA988 | 0xA98C..=0xA98E => MType::IV,
             // Joiners (200C, 200D)
             0x200D | 0x034F => MType::J,
-            // Reserved characters from the Buginese block (1A1C, 1A1D)
-            0x1A1C | 0x1A1D => MType::R,
-            // Symbols (1A1E, 1A1F, A9CF)
-            0x1A1E | 0x1A1F | 0xA9CF => MType::S,
-            // Above base dependent vowel (1A17, 1A1B)
-            0x1A17 | 0x1A1B => MType::VAbv,
-            // Below base dependent vowel (1A18)
-            0x1A18 => MType::VBlw,
-            // Pre base dependent vowel (1A19)
-            0x1A19 => MType::VPre,
-            // Post base dependent vowel (1A1A)
-            0x1A1A => MType::VPst,
+            // Modifiers (A980–A983)
+            0xA980..=0xA983 => MType::M,
+            // Medial consonants Ra (A9BF)
+            0xA9BF => MType::MR,
+            // Medial consonant Ya (A9BE)
+            0xA9BE => MType::MY,
+            // Nukta/Cecak Telu (A9B3)
+            0xA9B3 => MType::N,
+            // Punctuation (A9C1–A9CD)
+            0xA9C1..=0xA9CD => MType::P,
+            // Reserved characters from the Javanese block (A9CE, A9DA–A9DD)
+            0xA9CE | 0xA9DA..=0xA9DD => MType::R,
+            // Symbols (A9CF, A9DE, A9DF)
+            0xA9CF | 0xA9DE | 0xA9DF => MType::S,
+            // Above base dependent vowel (A9B6, A9B7, A9BC)
+            0xA9B6 | 0xA9B7 | 0xA9BC => MType::VAbv,
+            // Below base dependent vowel (A9B8, A9B9)
+            0xA9B8 | 0xA9B9 => MType::VBlw,
+            // Pre base dependent vowel (A9BA, A9BB)
+            0xA9BA | 0xA9BB => MType::VPre,
+            // Post base dependent vowel (A9B4, A9B5, A9BD)
+            0xA9B4 | 0xA9B5 | 0xA9BD => MType::VPst,
             // Variation selectors (FE00–FE0F)
             0xFE00..=0xFE0F => MType::VS,
             // Word joiner (2060)
@@ -68,6 +88,7 @@ impl MType {
             0x200C => MType::NJ,
             // Whitespace (0020, 0009, 000A, 000D, 000C, 0085, 3000, 200B)
             &WHITESPACE => MType::WS,
+            // Script common
             _ => MType::O,
         }
     }
@@ -140,13 +161,13 @@ impl <'a> Cluster<'a> {
         clusters
     }
 
-    /// Once the Buginese shaping engine has analyzed the run into
+    /// Once the Javanese shaping engine has analyzed the run into
     /// clusters as described above, it performs any required reordering.
-    /// Pre-base vowels (VPre) are reordered to the start of the syllable
-    /// cluster. A sequence of multiple pre-base vowels is permitted.
-    /// Such sequences are moved as a block to the beginning of the cluster.
-    /// In the following example, the run of code points represents a
-    /// single cluster.
+    /// Pre-base vowels (VPre) are reordered to the start of the
+    /// syllable cluster. A sequence of multiple pre-base vowels is
+    /// permitted. Such sequences are moved as a block to the beginning
+    /// of the cluster. In the following example, the run of code points
+    /// represents a single cluster.
     fn get_sorted(&mut self) -> Vec<u16> {
         // sort
         let mut idx: usize = 0;
@@ -184,11 +205,12 @@ impl <'a> Cluster<'a> {
 /// character clusters are defined as follows:
 /// 
 /// Cases:
-/// 1) Simple non-compounding cluster: < S | Rsv | WS | O | J | WJ >
-/// 2) Clusters:                       < C | GB > [VS] (VPre)* (VAbv)* (VBlv)* (VPst)* [J]
+/// 1) Simple non-compounding cluster: < IV | P | D | S | R | WS | O | WJ >
+/// 2) Cluster terminating in Halant:  < C | GB > [VS] [N] (H C [VS] [N])* H
+/// 3) Complex cluster:                < C | GB > [VS] [N] (H C [VS] [N]) [MCR] [MCY] (VPre) (VAbv) (VBlw) (M)*
 ///
-/// Ex. ᨔᨗᨔᨗᨊᨗᨊ
-pub fn shape_buginese(input: &mut [u16]) {
+/// Ex. ꦧꦺꦲꦏ꧀ꦠꦸꦩꦿꦥ꧀ꦲ​
+pub fn shape_javanese(input: &mut [u16]) {
     let mut res: Vec<u16> = Vec::with_capacity(input.len());
     // Step 1: Convert input to clusters
     let defs = Definition::build_definition(input);
@@ -210,37 +232,24 @@ mod tests {
     use super::*;
 
     #[test]
-    fn buginese_test() {
-        let input: &[u16] = &[0x1A00, 0x1A19, 0x034F, 0x1A19, 0x034F, 0x1A17];
-        let expected: &[u16] = &[0x1A19, 0x034F, 0x1A19, 0x034F, 0x1A00, 0x1A17];
+    fn javanese_test() {
+        let input: &[u16] = &[0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9BA, 0xA9BA, 0xA9B7];
+        let expected: &[u16] = &[0xA9BA, 0xA9BA, 0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9B7];
         let mut result = input.to_vec();
-        shape_buginese(&mut result);
+        shape_javanese(&mut result);
         assert_eq!(result, expected);
     }
 
     #[test]
-    fn buginese_2_test() {
-        let input = "ᨔᨗᨔᨗᨊᨗᨊ";
-        let expected: &[u16] = &[6676, 6679, 6676, 6679, 6666, 6679, 6666];
+    fn javanese_2_test() {
+        let input = "ꦧꦺꦲꦏ꧀ꦠꦸꦩꦿꦥ꧀ꦲ";
+        let expected: &[u16] = &[43450, 43431, 43442, 43407, 43456, 43424, 43448, 43433, 43455, 43429, 43456, 43442];
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         // Create a reference to the slice
         let input_utf16_ref: &[u16] = &input_utf16_slice;
         let mut result = input_utf16_ref.to_vec();
-        shape_buginese(&mut result);
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn buginese_3_test() {
-        let input = "ᨑᨗ ᨍᨍᨗᨕᨂᨗ";
-        let expected: &[u16] = &[6673, 6679, 32, 6669, 6669, 6679, 6677, 6658, 6679];
-        // Encode the string as UTF-16 and obtain a slice of u16 values
-        let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
-        // Create a reference to the slice
-        let input_utf16_ref: &[u16] = &input_utf16_slice;
-        let mut result = input_utf16_ref.to_vec();
-        shape_buginese(&mut result);
+        shape_javanese(&mut result);
         assert_eq!(result, expected);
     }
 }
