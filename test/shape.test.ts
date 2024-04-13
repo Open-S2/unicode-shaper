@@ -40,6 +40,12 @@ describe('many different string cases', () => {
     const expected = String.fromCharCode(...[4156, 4121, 4116, 4154, 4121, 4140])
     expect(wasm.shapeString(input)).toEqual(expected)
   })
+
+  test('tibetan string', () => {
+    const input = 'བོད་རང་སྐྱོང་ལྗོངས།'
+    const expected = String.fromCharCode(...[3964, 3926, 3921, 3851, 3938, 3908, 3851, 3964, 3942, 3984, 4017, 3908, 3851, 3964, 3939, 3991, 3908, 3942, 3853])
+    expect(wasm.shapeString(input)).toEqual(expected)
+  })
 })
 
 describe('boolean RTL & CJK', () => {

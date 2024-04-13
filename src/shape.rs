@@ -13,10 +13,6 @@ pub fn shared_shaper(input: &mut [u16], comparitor: &[u16]) {
     }
 }
 
-pub fn shape_tibetan(input: &mut [u16]) {
-    shared_shaper(input, &TIBETAN_VOWELS);
-}
-
 pub fn shape_tamil(input: &mut [u16]) {
     shared_shaper(input, &TAMIL_VOWELS);
 }
@@ -171,6 +167,16 @@ mod tests {
         let input: &[u16] = &[0x1004, 0x103A, 0x1039, 0x1000, 0x1039, 0x1000, 0x103B, 0x103C, 0x103D, 0x1031, 0x1031, 0x102D, 0x102F, 0x1036, 0x102C, 0x1036];
         let expected: &[u16] = &[0x1031, 0x1031, 0x103C, 0x1000, 0x1004, 0x103A, 0x1039, 0x1039, 0x1000, 0x103B, 0x103D, 0x102D, 0x1036, 0x102F, 0x102C, 0x1036];
         let result: &[u16] = &shape_unicode(input, &DEFAULT_OPTIONS);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn tibetan_test() {
+        let input = "བོད་རང་སྐྱོང་ལྗོངས།";
+        let expected: &[u16] = &[3964, 3926, 3921, 3851, 3938, 3908, 3851, 3964, 3942, 3984, 4017, 3908, 3851, 3964, 3939, 3991, 3908, 3942, 3853];
+        // Encode the string as UTF-16 and obtain a slice of u16 values
+        let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
+        let result: &[u16] = &shape_unicode(&input_utf16_slice, &DEFAULT_OPTIONS);
         assert_eq!(result, expected);
     }
 }

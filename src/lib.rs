@@ -12,6 +12,7 @@ pub use ubidi_internal::*;
 pub use shape_arabic::*;
 pub use shape_internal::*;
 pub use shape_myanmar::*;
+pub use shape_tibetan::*;
 pub use shape::*;
 // Export all public items from ubidi
 pub use ubidi::*;
@@ -20,6 +21,7 @@ pub use ubidi::*;
 mod shape_arabic;
 mod shape_internal;
 mod shape_myanmar;
+mod shape_tibetan;
 mod shape;
 mod ubidi_internal;
 mod ubidi;
