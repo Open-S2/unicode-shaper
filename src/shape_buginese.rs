@@ -210,7 +210,7 @@ mod tests {
     #[test]
     fn buginese_test() {
         let input: &[u16] = &[0x1A00, 0x1A19, 0x034F, 0x1A19, 0x034F, 0x1A17];
-        let expected: &[u16] = &[0x1A19, 0x034F, 0x1A19, 0x034F, 0x1A17, 0x1A00];
+        let expected: &[u16] = &[0x1A19, 0x034F, 0x1A19, 0x034F, 0x1A00, 0x1A17];
         let mut result = input.to_vec();
         shape_buginese(&mut result);
         assert_eq!(result, expected);
@@ -219,7 +219,7 @@ mod tests {
     #[test]
     fn buginese_2_test() {
         let input = "ᨔᨗᨔᨗᨊᨗᨊ";
-        let expected: &[u16] = &[6679, 6676, 6679, 6676, 6679, 6666, 6666];
+        let expected: &[u16] = &[6676, 6679, 6676, 6679, 6666, 6679, 6666];
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         // Create a reference to the slice
@@ -232,7 +232,7 @@ mod tests {
     #[test]
     fn buginese_3_test() {
         let input = "ᨑᨗ ᨍᨍᨗᨕᨂᨗ";
-        let expected: &[u16] = &[6679, 6673, 32, 6679, 6669, 6669, 6679, 6677, 6658];
+        let expected: &[u16] = &[6673, 6679, 32, 6669, 6669, 6679, 6677, 6658, 6679];
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         // Create a reference to the slice

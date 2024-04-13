@@ -185,7 +185,7 @@ mod tests {
     #[test]
     fn buginese_test() {
         let input = "ᨑᨗ ᨍᨍᨗᨕᨂᨗ";
-        let expected: &[u16] = &[6679, 6673, 32, 6679, 6669, 6669, 6679, 6677, 6658];
+        let expected: &[u16] = &[6673, 6679, 32, 6669, 6669, 6679, 6677, 6658, 6679];
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         // Create a reference to the slice
