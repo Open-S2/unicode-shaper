@@ -156,11 +156,11 @@ impl <'a> Cluster<'a> {
                     self.defs.insert(0, v_pre);
                 },
                 MType::VAbv | MType::VBlw | MType::VPst => {
-                    // always put the head position consonant infront of the head letter
-                    let mut head_idx = idx;
-                    while head_idx > 0 && self.defs[head_idx].m_type != MType::C && self.defs[head_idx].m_type != MType::GB { head_idx -= 1; }
-                    let vowel_sign = self.defs.remove(idx);
-                    self.defs.insert(head_idx, vowel_sign);
+                    // // always put the head position consonant infront of the head letter
+                    // let mut head_idx = idx;
+                    // while head_idx > 0 && self.defs[head_idx].m_type != MType::C && self.defs[head_idx].m_type != MType::GB { head_idx -= 1; }
+                    // let vowel_sign = self.defs.remove(idx);
+                    // self.defs.insert(head_idx, vowel_sign);
                 },
                 _ => {},
             }
