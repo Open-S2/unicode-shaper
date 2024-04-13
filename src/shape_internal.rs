@@ -656,3 +656,20 @@ pub static SHAPE_TABLE: [[[u8; 4]; 4]; 4] = [
         [0, 1, 1, 3],
     ],
 ];
+
+pub const TIBETAN_VOWELS: [u16; 12] = [
+    3953, 3954, 3955, 3956, 3957, 3958, 3959, 3960, 3961, 3962, 3963, 3964
+];
+
+pub const TAMIL_VOWELS: [u16; 11] = [
+    3006, 3007, 3008, 3009, 3010, 3011, 3012, 3013, 3014, 3015, 3016
+];
+
+pub const KHMER_SIGN_COENG: u16 = 0x17D2; // 6098
+
+pub const KHMER_DEPENDENT_VOWELS: [u16; 16] = [
+    // dependent vowels
+    0x17B6, 0x17B7, 0x17B8, 0x17B9, 0x17BA, 0x17BB, 0x17BC, 0x17BD,
+    0x17BE, 0x17BF, 0x17C0, 0x17C1, 0x17C2, 0x17C3, 0x17C4, 0x17C5,
+    // various signs
+];

@@ -189,4 +189,13 @@ mod tests {
         assert_ne!(result, input_utf16_ref);
         assert_eq!(result, expected_utf16_ref);
     }
+
+    #[test]
+    fn hebrew_string() {
+        let input_utf16_ref: &[u16] = &[1468, 1489];
+        let expected_utf16_ref: &[u16] = &[1489, 1468];
+        let result: &[u16] = &process_bidi_text(input_utf16_ref);
+        assert_ne!(result, input_utf16_ref);
+        assert_eq!(result, expected_utf16_ref);
+    }
 }

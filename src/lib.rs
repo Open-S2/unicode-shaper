@@ -6,19 +6,22 @@ use alloc::vec::Vec;
 #[cfg(target_arch = "wasm32")]
 use core::mem;
 
-// Export all public items from shape_internal
-pub use shape_internal::*;
 // Export all public items from ubidi_internal
 pub use ubidi_internal::*;
-// Export all public items from shape
+// Export all public items from shapes
+pub use shape_arabic::*;
+pub use shape_internal::*;
+pub use shape_myanmar::*;
 pub use shape::*;
 // Export all public items from ubidi
 pub use ubidi::*;
 
 // Declare the modules
+mod shape_arabic;
 mod shape_internal;
-mod ubidi_internal;
+mod shape_myanmar;
 mod shape;
+mod ubidi_internal;
 mod ubidi;
 
 #[cfg(target_arch = "wasm32")]

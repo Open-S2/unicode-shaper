@@ -73,15 +73,16 @@ Follow the installation guides for [WABT](https://github.com/WebAssembly/wabt). 
 ```sh
 # feel free to check https://github.com/unicode-org/icu/releases for latest version
 # just be sure to use the RC `release-XX-rc/icu4c-XXrc-src.tgz`
-wget https://github.com/unicode-org/icu/releases/download/release-73-rc/icu4c-73rc-src.tgz
-tar xzf icu4c-73rc-src.tgz
-rm icu4c-73rc-src.tgz
+wget https://github.com/unicode-org/icu/releases/download/release-75-rc/icu4c-75rc-src.tgz
+tar xzf icu4c-75rc-src.tgz
+rm icu4c-75rc-src.tgz
 
 cd icu/source
 
 ./runConfigureICU --help
-CXXFLAGS=-std=c++20 ./runConfigureICU MacOSX/GCC --disable-renaming
-# OR
+# MACOSX
+CXXFLAGS=-std=c++20 ./runConfigureICU MacOSX --disable-renaming
+# Linux
 CXXFLAGS=-std=c++20 ./runConfigureICU Linux/gcc --disable-renaming
 
 make clean
@@ -93,5 +94,31 @@ sudo make install
 ### 2 Run comparison experiments via test.cpp
 
 ```sh
-g++ -stdlib=libc++ -std=c++20 -w -fPIC -I/usr/local/include -L/usr/local/lib -l icuuc test.cpp -o test
+g++ -stdlib=libc++ -std=c++20 -w -fPIC -I/usr/local/include -L/usr/local/lib -licuuc test.cpp -o test
 ```
+
+## Supported Lanaguages
+
+[x] [Standard (Latin, Cyrillic, Greek, etc.)](https://learn.microsoft.com/en-us/typography/script-development/standard)
+[x] [Arabic](https://learn.microsoft.com/en-us/typography/script-development/arabic)
+[ ] [Buginese](https://learn.microsoft.com/en-us/typography/script-development/buginese)
+[ ] [Hangul](https://learn.microsoft.com/en-us/typography/script-development/hangul)
+[x] [Hebrew](https://learn.microsoft.com/en-us/typography/script-development/hebrew)
+[ ] [Indic: Bengali](https://learn.microsoft.com/en-us/typography/script-development/bengali)
+[ ] [Indic: Devanagari](https://learn.microsoft.com/en-us/typography/script-development/devanagari)
+[ ] [Indic: Gujarati](https://learn.microsoft.com/en-us/typography/script-development/gujarati)
+[ ] [Indic: Gurmukhi](https://learn.microsoft.com/en-us/typography/script-development/gurmukhi)
+[ ] [Indic: Kannada](https://learn.microsoft.com/en-us/typography/script-development/kannada)
+[ ] [Indic: Malayalam](https://learn.microsoft.com/en-us/typography/script-development/malayalam)
+[ ] [Indic: Odia](https://learn.microsoft.com/en-us/typography/script-development/odia)
+[ ] [Indic: Tamil](https://learn.microsoft.com/en-us/typography/script-development/tamil)
+[ ] [Indic: Telugu](https://learn.microsoft.com/en-us/typography/script-development/telugu)
+[ ] [Javanese](https://learn.microsoft.com/en-us/typography/script-development/javanese)
+[ ] [Khmer](https://learn.microsoft.com/en-us/typography/script-development/khmer)
+[ ] [Lao](https://learn.microsoft.com/en-us/typography/script-development/lao)
+[ ] [Myanmar](https://learn.microsoft.com/en-us/typography/script-development/myanmar)
+[ ] [Sinhala](https://learn.microsoft.com/en-us/typography/script-development/sinhala)
+[ ] [Syric](https://learn.microsoft.com/en-us/typography/script-development/syriac)
+[ ] [Thaana](https://learn.microsoft.com/en-us/typography/script-development/thaana)
+[ ] [Thai](https://learn.microsoft.com/en-us/typography/script-development/thai)
+[x] [Tibetan](https://learn.microsoft.com/en-us/typography/script-development/tibetan)
