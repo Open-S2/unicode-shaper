@@ -1,3 +1,5 @@
+// https://www.unicode.org/charts/PDF/U0600.pdf
+// https://r12a.github.io/scripts/arab/arb.html
 use alloc::vec::Vec;
 
 use crate::*;
@@ -91,19 +93,18 @@ fn get_link(ch: &u16) -> u16 {
 // Tashkeel with shadda on tatweel (FC range)return 2 otherwise
 // returns 0
 fn is_tashkeel_on_tatweel_char(ch: &u16) -> i32 {
-    if
-        *ch >= 0xfe70 &&
-        *ch <= 0xfe7f &&
-        *ch != NEW_TAIL_CHAR &&
-        *ch != 0xFE75 &&
-        *ch != SHADDA_TATWEEL_CHAR
+    if *ch >= 0xfe70
+        && *ch <= 0xfe7f
+        && *ch != NEW_TAIL_CHAR
+        && *ch != 0xFE75
+        && *ch != SHADDA_TATWEEL_CHAR
     {
         let ind: usize = (*ch - 0xFE70).into();
         return TASHKEEL_MEDIAL[ind].into();
     } else if (*ch >= 0xfcf2 && *ch <= 0xfcf4) || *ch == SHADDA_TATWEEL_CHAR {
         return 2;
     }
-    
+
     0
 }
 
@@ -112,18 +113,13 @@ fn is_tashkeel_on_tatweel_char(ch: &u16) -> i32 {
 // with shadda is in the isolated form (i.e. Unicode FC range)
 // returns 2 otherwise returns 0
 fn is_isolated_tashkeel_char(ch: &u16) -> i32 {
-    if
-        *ch >= 0xfe70 &&
-        *ch <= 0xfe7f &&
-        *ch != NEW_TAIL_CHAR &&
-        *ch != 0xFE75
-    {
+    if *ch >= 0xfe70 && *ch <= 0xfe7f && *ch != NEW_TAIL_CHAR && *ch != 0xFE75 {
         let ind: usize = (*ch - 0xFE70).into();
         return (1 - TASHKEEL_MEDIAL[ind]).into();
     } else if *ch >= 0xfc5e && *ch <= 0xfc63 {
         return 1;
     }
-    
+
     0
 }
 
@@ -157,7 +153,8 @@ fn count_spaces(dest: &[u16], spaces_countl: &mut usize, spaces_countr: &mut usi
         countl += 1;
         i += 1;
     }
-    if countl < s { // the entire buffer is not all space
+    if countl < s {
+        // the entire buffer is not all space
         while dest[s - 1] == SPACE_CHAR {
             countr += 1;
             s -= 1;
@@ -170,11 +167,7 @@ fn count_spaces(dest: &[u16], spaces_countl: &mut usize, spaces_countr: &mut usi
 // This function inverts the buffer, it's used
 // in case the user specifies the buffer to be
 // U_SHAPE_TEXT_DIRECTION_LOGICAL
-fn invert_buffer(
-    buffer: &mut [u16],
-    lowlimit: usize,
-    highlimit: usize,
-) {
+fn invert_buffer(buffer: &mut [u16], lowlimit: usize, highlimit: usize) {
     // let mut tmp: u16 = 0;
     let mut i: usize = lowlimit;
     let mut j: usize = buffer.len() - highlimit - 1;
@@ -192,14 +185,14 @@ fn calculate_size(source: &[u16], options: &u32) -> usize {
     let mut lam_alef_option: bool = false;
     let mut tashkeel_option: bool = false;
 
-    if ((options & U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_SHAPE ||
-        ((options & U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED)) &&
-        ((options & U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_RESIZE)
+    if ((options & U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_SHAPE
+        || ((options & U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED))
+        && ((options & U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_RESIZE)
     {
         lam_alef_option = true;
     }
-    if (options & U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_SHAPE &&
-        ((options & U_SHAPE_TASHKEEL_MASK) == U_SHAPE_TASHKEEL_RESIZE)
+    if (options & U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_SHAPE
+        && ((options & U_SHAPE_TASHKEEL_MASK) == U_SHAPE_TASHKEEL_RESIZE)
     {
         tashkeel_option = true;
     }
@@ -208,11 +201,12 @@ fn calculate_size(source: &[u16], options: &u32) -> usize {
         if (options & U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_VISUAL_LTR {
             i = 0;
             while i < source.len() {
-                if ((
-                    is_alef_char(&source[i]) &&
-                    i < (source.len() - 1) && 
-                    source[i + 1] == LAM_CHAR
-                ) || is_tashkeel_char_fe(&source[i])) && dest_size > 0 {
+                if ((is_alef_char(&source[i])
+                    && i < (source.len() - 1)
+                    && source[i + 1] == LAM_CHAR)
+                    || is_tashkeel_char_fe(&source[i]))
+                    && dest_size > 0
+                {
                     dest_size -= 1;
                 }
                 i += 1
@@ -220,11 +214,12 @@ fn calculate_size(source: &[u16], options: &u32) -> usize {
         } else if (options & U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL {
             i = 0;
             while i < source.len() {
-                if ((
-                    (source[i] == LAM_CHAR) &&
-                    (i < (source.len() - 1)) &&
-                    (is_alef_char(&source[i + 1]))
-                ) || (is_tashkeel_char_fe(&source[i]))) && (dest_size > 0) {
+                if (((source[i] == LAM_CHAR)
+                    && (i < (source.len() - 1))
+                    && (is_alef_char(&source[i + 1])))
+                    || (is_tashkeel_char_fe(&source[i])))
+                    && (dest_size > 0)
+                {
                     dest_size -= 1;
                 }
                 i += 1
@@ -232,10 +227,9 @@ fn calculate_size(source: &[u16], options: &u32) -> usize {
         }
     }
 
-    if (
-        (options & U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_UNSHAPE) &&
-        ((options & U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_RESIZE
-    ) {
+    if ((options & U_SHAPE_LETTERS_MASK) == U_SHAPE_LETTERS_UNSHAPE)
+        && ((options & U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_RESIZE)
+    {
         i = 0;
         while i < source.len() {
             if is_lam_alef_char(&source[i]) && dest_size > 0 {
@@ -398,7 +392,7 @@ fn calculate_size(source: &[u16], options: &u32) -> usize {
 //         j = 0;
 //         count = 0;
 //         while i < source_length {
-//             if 
+//             if
 //                 lam_alef_option && dest[i] == LAMALEF_SPACE_SUB ||
 //                 tashkeel_option && dest[i] == TASHKEEL_SPACE_SUB
 //             {
@@ -657,12 +651,10 @@ fn _shape_arabic(
 
     loop {
         // If high byte of curr_link > 0 then more than one shape
-        if
-            (curr_link & 0xFF00) > 0 ||
-            (get_link(&dest[i]) & IRRELEVANT) != 0
-        {
+        if (curr_link & 0xFF00) > 0 || (get_link(&dest[i]) & IRRELEVANT) != 0 {
             nw = (i as isize) - 1;
-            while nx < 0 { // we need to know about next char
+            while nx < 0 {
+                // we need to know about next char
                 if nw == I_END {
                     next_link = 0;
                     nx = 3000;
@@ -670,7 +662,9 @@ fn _shape_arabic(
                     next_link = get_link(&dest[nw as usize]);
                     if (next_link & IRRELEVANT) == 0 {
                         nx = nw;
-                    } else { nw -= 1; }
+                    } else {
+                        nw -= 1;
+                    }
                 }
             }
 
@@ -711,11 +705,11 @@ fn _shape_arabic(
             if (curr_link & (LINKR + LINKL)) == 1 {
                 shape &= 1;
             } else if is_tashkeel_char(&dest[i]) {
-                if ((last_link & LINKL) > 0) &&
-                    ((next_link & LINKR) > 0) &&
-                    (tashkeel_flag == 1) &&
-                    dest[i] != 0x064C &&
-                    dest[i] != 0x064D
+                if ((last_link & LINKL) > 0)
+                    && ((next_link & LINKR) > 0)
+                    && (tashkeel_flag == 1)
+                    && dest[i] != 0x064C
+                    && dest[i] != 0x064D
                 {
                     shape = 1;
                     if (next_link & ALEFTYPE) == ALEFTYPE && (last_link & LAMTYPE) == LAMTYPE {
@@ -735,7 +729,9 @@ fn _shape_arabic(
                     } else {
                         let ind: usize = (dest[i] - 0x064B).into();
                         // ensure the array index is within the range
-                        if dest[i] < 0x064B || ind >= IRRELEVANT_POS.len() { unreachable!(); }
+                        if dest[i] < 0x064B || ind >= IRRELEVANT_POS.len() {
+                            unreachable!();
+                        }
                         dest[i] = 0xFE70 + (IRRELEVANT_POS[ind] as u16) + shape;
                     }
                 } else if (curr_link & APRESENT) > 0 {
@@ -755,14 +751,18 @@ fn _shape_arabic(
 
         ii = (i as isize) - 1;
         // safety check
-        if ii >= 0 { i -= 1; }
+        if ii >= 0 {
+            i -= 1;
+        }
         if ii == nx {
             curr_link = next_link;
             nx = -2;
         } else if ii != I_END {
             curr_link = get_link(&dest[i]);
         }
-        if ii == I_END { break; }
+        if ii == I_END {
+            break;
+        }
     }
 
     // NOTE: Since we are only interested in shaping the Arabic characters,
@@ -777,25 +777,29 @@ fn _shape_arabic(
     // }
 }
 
-pub fn shape_arabic(
-    input: &[u16],
-    options: &u32,
-) -> Vec<u16> {
+pub fn shape_arabic(input: &[u16], options: &u32) -> Vec<u16> {
     let mut source_ptr = input;
     let mut tempsource = Vec::<u16>::new();
 
     if (options & U_SHAPE_AGGREGATE_TASHKEEL_MASK) != 0 {
         tempsource.resize(input.len() * 2, 0);
-        let logical_order: bool = (options & U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL;
-        let aggregate_tashkeel: bool =
-            (options & (U_SHAPE_AGGREGATE_TASHKEEL_MASK + U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED)) ==
-            (U_SHAPE_AGGREGATE_TASHKEEL + U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED);
+        let logical_order: bool =
+            (options & U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL;
+        let aggregate_tashkeel: bool = (options
+            & (U_SHAPE_AGGREGATE_TASHKEEL_MASK + U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED))
+            == (U_SHAPE_AGGREGATE_TASHKEEL + U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED);
         let mut j: usize = 2 * input.len();
-        if logical_order { j = 0; }
+        if logical_order {
+            j = 0;
+        }
         let mut i: usize = input.len();
-        if logical_order { i = 0; }
+        if logical_order {
+            i = 0;
+        }
         let mut end: usize = input.len() - 1;
-        if logical_order { end = input.len(); }
+        if logical_order {
+            end = input.len();
+        }
         let mut aggregation_possible: bool = true;
         let mut prev: u16 = 0;
         let mut prev_link: u16;
@@ -805,7 +809,10 @@ pub fn shape_arabic(
         while i != end {
             prev_link = curr_link;
             curr_link = get_link(&input[i]);
-            if aggregate_tashkeel && ((prev_link | curr_link) & COMBINE) == COMBINE && aggregation_possible {
+            if aggregate_tashkeel
+                && ((prev_link | curr_link) & COMBINE) == COMBINE
+                && aggregation_possible
+            {
                 aggregation_possible = false;
                 if prev < input[i] {
                     tempsource[j] = prev - 0x064C + 0xFC5E;
@@ -825,8 +832,11 @@ pub fn shape_arabic(
                 prev = input[i];
             }
             // move one notch forward
-            if logical_order { i += 1; }
-            else { i -= 1; }
+            if logical_order {
+                i += 1;
+            } else {
+                i -= 1;
+            }
         }
         if logical_order {
             source_ptr = &tempsource[0..new_source_length];
@@ -863,8 +873,8 @@ pub fn shape_arabic(
     // Arabic shaping
     match options & U_SHAPE_LETTERS_MASK {
         U_SHAPE_LETTERS_SHAPE => {
-            if ((options & U_SHAPE_TASHKEEL_MASK) > 0) &&
-                ((options & U_SHAPE_TASHKEEL_MASK) != U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL)
+            if ((options & U_SHAPE_TASHKEEL_MASK) > 0)
+                && ((options & U_SHAPE_TASHKEEL_MASK) != U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL)
             {
                 // Call the shaping function with tashkeel flag == 2 for removal of tashkeel
                 _shape_arabic(&mut output, 2);
@@ -877,14 +887,14 @@ pub fn shape_arabic(
                     handle_tashkeel_with_tatweel(&mut output);
                 }
             }
-        },
+        }
         U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED => {
             // Call the shaping function with tashkeel flag == 0
             _shape_arabic(&mut output, 0);
-        },
+        }
         _ => {
             // will never occur because of validity checks above
-        },
+        }
     }
 
     if (options & U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL {
@@ -892,7 +902,6 @@ pub fn shape_arabic(
         invert_buffer(&mut output, spaces_countl, spaces_countr);
     }
     // End of Arabic letter shaping part
-    
 
     // copy a slice to a new slice "arabic_output" of output_size
     // and run through output, skip every LAMALEF_SPACE_SUB and TASHKEEL_SPACE_SUB

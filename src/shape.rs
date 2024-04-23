@@ -17,21 +17,6 @@ pub fn shape_tamil(input: &mut [u16]) {
     shared_shaper(input, &TAMIL_VOWELS);
 }
 
-// TODO: INCOMPLETE, sometimes KHMER_SIGN_COENG goes after the consonent it modifies
-pub fn shape_khmer(input: &mut [u16]) {
-    shared_shaper(input, &KHMER_DEPENDENT_VOWELS);
-    // for each KHMER_SIGN_COENG, move itself and the next character
-    // behind the consonent it modifies.
-    // the following Khmer letter is moved as well to be rendered subscripted
-    for i in 0..input.len() {
-        if i == 0 { continue; }
-        if input[i] == KHMER_SIGN_COENG {
-            input.swap(i, i - 1);
-            input.swap(i, i + 1);
-        }
-    }
-}
-
 // Converts an Arabic Unicode buffer in 06xx Range into a shaped
 // arabic Unicode buffer in FExx Range
 pub fn shape_unicode(
@@ -55,7 +40,7 @@ pub fn shape_unicode(
         // Tibetan shaping
         shape_tibetan(&mut output);
         // khmer
-        // shape_khmer(&mut output);
+        shape_khmer(&mut output);
     }
 
     // if option to process bidirectional text is set, then reorder the output

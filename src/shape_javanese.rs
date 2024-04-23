@@ -1,4 +1,5 @@
 // https://www.unicode.org/charts/PDF/UA980.pdf
+// https://r12a.github.io/scripts/java/jv.html
 use alloc::vec::Vec;
 
 pub fn is_javanese(c: &u16) -> bool {
@@ -6,8 +7,7 @@ pub fn is_javanese(c: &u16) -> bool {
     *c >= 0xA980 && *c <= 0xA9DF
 }
 
-const WHITESPACE: u16 =
-    0x0020 | // Space
+const WHITESPACE: u16 = 0x0020 | // Space
     0x0009 | // Tab
     0x000A | // Line feed
     0x000D | // Carriage return
@@ -22,27 +22,27 @@ const WHITESPACE: u16 =
 
 #[derive(Debug, Clone, PartialEq)]
 enum MType {
-    C, // Consonants (A984, A989–A98B, A98F–A9B2)
-    GB, // Generic base characters (00A0, 00D7, 2012–2015, 2022, 25CC, 25FB–25FE)
-    H, // Halant/virama (A9C0)
-    IV, // Independent vowel (A985–A988, A98C–A98E)
-    J, // Joiners (200D ZWJ (Zero Width Joiner) & 034F CGJ (COMBINING GRAPHEME JOINER))
-    M, // Modifiers (A980–A983)
-    MR, // Medial consonants Ra (A9BF)
-    MY, // Medial consonant Ya (A9BE)
-    N, // Nukta/Cecak Telu (A9B3)
-    O, // SCRIPT_COMMON characters in a Javanese run
-    P, // Punctuation (A9C1–A9CD)
-    R, // Reserved characters from the Javanese block (A9CE, A9DA–A9DD)
-    S, // Symbols (A9CF, A9DE, A9DF)
+    C,    // Consonants (A984, A989–A98B, A98F–A9B2)
+    GB,   // Generic base characters (00A0, 00D7, 2012–2015, 2022, 25CC, 25FB–25FE)
+    H,    // Halant/virama (A9C0)
+    IV,   // Independent vowel (A985–A988, A98C–A98E)
+    J,    // Joiners (200D ZWJ (Zero Width Joiner) & 034F CGJ (COMBINING GRAPHEME JOINER))
+    M,    // Modifiers (A980–A983)
+    MR,   // Medial consonants Ra (A9BF)
+    MY,   // Medial consonant Ya (A9BE)
+    N,    // Nukta/Cecak Telu (A9B3)
+    O,    // SCRIPT_COMMON characters in a Javanese run
+    P,    // Punctuation (A9C1–A9CD)
+    R,    // Reserved characters from the Javanese block (A9CE, A9DA–A9DD)
+    S,    // Symbols (A9CF, A9DE, A9DF)
     VAbv, // Above base dependent vowel (A9B6, A9B7, A9BC)
     VBlw, // Below base dependent vowel (A9B8, A9B9)
     VPre, // Pre base dependent vowel (A9BA, A9BB)
     VPst, // Post base dependent vowel (A9B4, A9B5, A9BD)
-    VS, // Variation selectors (FE00–FE0F)
-    WJ, // Word joiner (2060)
-    NJ, // Non-joiner (200C) [Zero Width Non-Joiner]
-    WS, // Whitespace (0020, 0009, 000A, 000D, 000C, 0085, 3000, 200B)
+    VS,   // Variation selectors (FE00–FE0F)
+    WJ,   // Word joiner (2060)
+    NJ,   // Non-joiner (200C) [Zero Width Non-Joiner]
+    WS,   // Whitespace (0020, 0009, 000A, 000D, 000C, 0085, 3000, 200B)
 }
 impl MType {
     // note: isSpecialSequence is for K, if true, '103A, 1039' come after c
@@ -93,7 +93,7 @@ impl MType {
         }
     }
 
-    fn is_same (&self, other: &u16) -> bool {
+    fn is_same(&self, other: &u16) -> bool {
         let other_type = MType::from_u16(other);
         *self == other_type || other_type == MType::J
     }
@@ -124,9 +124,7 @@ impl<'a> Definition<'a> {
             while end_idx < input.len() && MType::is_same(&m_type, &input[end_idx]) {
                 end_idx += 1;
             }
-            clusters.push(
-                Definition::new(m_type, &input[start_idx..end_idx])
-            );
+            clusters.push(Definition::new(m_type, &input[start_idx..end_idx]));
             idx = end_idx;
         }
 
@@ -138,7 +136,7 @@ struct Cluster<'a> {
     pub defs: Vec<Definition<'a>>,
     pub whitespace: Option<&'a u16>,
 }
-impl <'a> Cluster<'a> {
+impl<'a> Cluster<'a> {
     fn new(defs: Vec<Definition<'a>>, whitespace: Option<&'a u16>) -> Self {
         Self { defs, whitespace }
     }
@@ -149,7 +147,10 @@ impl <'a> Cluster<'a> {
         let mut def_idx = 0;
         for idx in 0..defs.len() {
             if defs[idx].m_type == MType::WS || defs[idx].m_type == MType::NJ {
-                clusters.push(Cluster::new(defs[def_idx..idx].to_vec(), Some(&defs[idx].code[0])));
+                clusters.push(Cluster::new(
+                    defs[def_idx..idx].to_vec(),
+                    Some(&defs[idx].code[0]),
+                ));
                 def_idx = idx + 1;
             }
         }
@@ -177,22 +178,24 @@ impl <'a> Cluster<'a> {
                     // Pre-base vowels (VPre) are reordered to the start of the syllable cluster.
                     let v_pre = self.defs.remove(idx);
                     self.defs.insert(0, v_pre);
-                },
+                }
                 MType::VAbv | MType::VBlw | MType::VPst => {
-                    // // always put the head position consonant infront of the head letter
+                    // always put the head position consonant infront of the head letter
                     // let mut head_idx = idx;
                     // while head_idx > 0 && self.defs[head_idx].m_type != MType::C && self.defs[head_idx].m_type != MType::GB { head_idx -= 1; }
                     // let vowel_sign = self.defs.remove(idx);
                     // self.defs.insert(head_idx, vowel_sign);
-                },
-                _ => {},
+                }
+                _ => {}
             }
             idx += 1;
         }
 
         // store
         let mut reordered = Vec::with_capacity(self.defs.len());
-        for def in &self.defs { reordered.extend_from_slice(def.code) }
+        for def in &self.defs {
+            reordered.extend_from_slice(def.code)
+        }
 
         reordered
     }
@@ -203,7 +206,7 @@ impl <'a> Cluster<'a> {
 /// combining marks occur without a valid base. The character U+25CC
 /// belongs to the class of generic bases (GB). Well-formed Buginese
 /// character clusters are defined as follows:
-/// 
+///
 /// Cases:
 /// 1) Simple non-compounding cluster: < IV | P | D | S | R | WS | O | WJ >
 /// 2) Cluster terminating in Halant:  < C | GB > [VS] [N] (H C [VS] [N])* H
@@ -220,7 +223,9 @@ pub fn shape_javanese(input: &mut [u16]) {
     clusters_sets.iter_mut().for_each(|c| {
         res.append(&mut c.get_sorted());
         // append whitespace of cluster if it exists
-        if let Some(ws) = c.whitespace { res.push(*ws); }
+        if let Some(ws) = c.whitespace {
+            res.push(*ws);
+        }
     });
 
     // now map the result to the original input
@@ -233,8 +238,12 @@ mod tests {
 
     #[test]
     fn javanese_test() {
-        let input: &[u16] = &[0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9BA, 0xA9BA, 0xA9B7];
-        let expected: &[u16] = &[0xA9BA, 0xA9BA, 0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9B7];
+        let input: &[u16] = &[
+            0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9BA, 0xA9BA, 0xA9B7,
+        ];
+        let expected: &[u16] = &[
+            0xA9BA, 0xA9BA, 0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9B7,
+        ];
         let mut result = input.to_vec();
         shape_javanese(&mut result);
         assert_eq!(result, expected);
@@ -243,7 +252,9 @@ mod tests {
     #[test]
     fn javanese_2_test() {
         let input = "ꦧꦺꦲꦏ꧀ꦠꦸꦩꦿꦥ꧀ꦲ";
-        let expected: &[u16] = &[43450, 43431, 43442, 43407, 43456, 43424, 43448, 43433, 43455, 43429, 43456, 43442];
+        let expected: &[u16] = &[
+            43450, 43431, 43442, 43407, 43456, 43424, 43448, 43433, 43455, 43429, 43456, 43442,
+        ];
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         // Create a reference to the slice

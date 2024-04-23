@@ -1,5 +1,6 @@
 // https://learn.microsoft.com/en-us/typography/script-development/tibetan
 // https://www.unicode.org/charts/PDF/U0F00.pdf
+// https://r12a.github.io/scripts/tibt/bo.html
 
 use alloc::vec::Vec;
 

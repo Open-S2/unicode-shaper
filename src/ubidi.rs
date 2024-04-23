@@ -2,13 +2,7 @@ extern crate alloc;
 use alloc::vec::Vec;
 use core::cell::RefCell;
 
-
-use crate::{
-    Type,
-    get_type,
-    find_dominant_type,
-    mirror_adjust_string,
-};
+use crate::{find_dominant_type, get_type, mirror_adjust_string, Type};
 
 struct Line {
     pub start: usize,
@@ -25,7 +19,7 @@ impl Chunk {
         Chunk {
             start: RefCell::new(start),
             end: RefCell::new(end),
-            r#type: RefCell::new(r#type)
+            r#type: RefCell::new(r#type),
         }
     }
 
@@ -33,7 +27,7 @@ impl Chunk {
         *self.r#type.borrow() == t
     }
 
-    pub fn set_type (&self, t: Type) {
+    pub fn set_type(&self, t: Type) {
         *self.r#type.borrow_mut() = t;
     }
 
@@ -68,14 +62,19 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
             if start == end {
                 start = idx + 1;
             } else {
-                lines.push(Line{ start, end: idx });
+                lines.push(Line { start, end: idx });
                 start = idx + 1;
             }
         }
         end = idx + 1;
     }
     // store the last line
-    if start < input.len() { lines.push(Line{ start, end: input.len() }); }
+    if start < input.len() {
+        lines.push(Line {
+            start,
+            end: input.len(),
+        });
+    }
     // step 2: iterate lines
     for (line_idx, line) in lines.iter().enumerate() {
         let line_str = &input[line.start..line.end];
@@ -88,7 +87,11 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
             find_dominant_type(line_str) == Type::Rtl
         };
         if cur_type == Type::Neutral || cur_type == Type::Weak {
-            if dominant_rtl { cur_type = Type::Rtl } else { cur_type = Type::Ltr; }
+            if dominant_rtl {
+                cur_type = Type::Rtl
+            } else {
+                cur_type = Type::Ltr;
+            }
         }
         // s2.2: group by RTL and LTR chunks
         start = 0;
@@ -108,8 +111,16 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
         let word_chunks_len = word_chunks.len();
         for idx in 0..word_chunks_len {
             let chunk = word_chunks.get(idx).unwrap();
-            let prev: Option<&Chunk> = if idx == 0 { None } else { word_chunks.get(idx - 1) };
-            let next: Option<&Chunk> = if idx == word_chunks_len - 1 { None } else { word_chunks.get(idx + 1) };
+            let prev: Option<&Chunk> = if idx == 0 {
+                None
+            } else {
+                word_chunks.get(idx - 1)
+            };
+            let next: Option<&Chunk> = if idx == word_chunks_len - 1 {
+                None
+            } else {
+                word_chunks.get(idx + 1)
+            };
             if chunk.is_type(Type::Neutral) {
                 if idx == 0 {
                     chunk.set_chunk_type(next.unwrap());
@@ -120,11 +131,10 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
                 } else {
                     chunk.set_type(if dominant_rtl { Type::Rtl } else { Type::Ltr });
                 }
-            } else if
-                chunk.is_type(Type::Weak) &&
-                idx != 0 &&
-                prev.unwrap().is_type(Type::Rtl) &&
-                !dominant_rtl
+            } else if chunk.is_type(Type::Weak)
+                && idx != 0
+                && prev.unwrap().is_type(Type::Rtl)
+                && !dominant_rtl
             {
                 // swap chunks
                 word_chunks.swap(idx, idx - 1);
@@ -159,7 +169,9 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
             result.extend_from_slice(chunk_str)
         }
         // TODO: use the original return (\n or \r) not just \n
-        if line_idx != lines.len() - 1 { result.push(0x000A); } // \n
+        if line_idx != lines.len() - 1 {
+            result.push(0x000A);
+        } // \n
     }
 
     result.to_vec()
