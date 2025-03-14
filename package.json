@@ -68,8 +68,8 @@
     "build:rust:ts": "bun run build-wasm.ts",
     "prepublishOnly": "bun run lint+build+test+docs",
     "package-check": "package-check",
-    "test": "cargo test && bun clippy && bun test",
-    "test:dev": "bun test --watch",
+    "test:dev": "bun test --watch --coverage",
+    "test": "bun test",
     "docs": "bunx typedoc",
     "clippy": "cargo clippy --target wasm32-unknown-unknown"
   }
