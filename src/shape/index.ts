@@ -1,31 +1,23 @@
 import { processBidiText } from '../ubidi';
 import { shapeArabic } from './arabic';
-import { TAMIL_VOWELS, U_SHAPE_DIRECTION_OUTPUT_BIDI, U_SHAPE_LETTERS_MASK } from './internal';
+import { shapeBuginese } from './buginese';
+import { shapeJavanese } from './javanese';
+import { shapeKhmer } from './khmer';
+import { shapeMyanmar } from './myanmar';
+import { shapeTamil } from './tamil';
+import { shapeTibetan } from './tibetan';
+import { U_SHAPE_DIRECTION_OUTPUT_BIDI, U_SHAPE_LETTERS_MASK } from './internal';
 
 export * from './arabic';
+export * from './buginese';
+export * from './cjk';
 export * from './internal';
-
-/**
- * Shared shaper - swaps characters
- * @param input - input unicode buffer
- * @param comparitor - characters to swap
- */
-export function sharedShaper(input: number[], comparitor: number[]): void {
-  for (let i = 0; i < input.length; i++) {
-    if (i === 0) continue;
-    if (comparitor.includes(input[i])) {
-      [input[i - 1], input[i]] = [input[i], input[i - 1]];
-    }
-  }
-}
-
-/**
- * Converts Tamil Unicode buffer into a shaped Tamil Unicode buffer
- * @param input - input unicode buffer
- */
-export function shapeTamil(input: number[]): void {
-  sharedShaper(input, TAMIL_VOWELS);
-}
+export * from './javanese';
+export * from './khmer';
+export * from './myanmar';
+export * from './tamil';
+export * from './thai';
+export * from './tibetan';
 
 /**
  * Converts an Arabic Unicode buffer in 06xx Range into a shaped
@@ -42,18 +34,18 @@ export function shapeUnicode(source: number[], options: number): number[] {
     // arabic shaping
     output = shapeArabic(output, options);
     // TODO:
-    // // Buginese shaping
-    // shapeBuginese(output);
-    // // Javanese shaping
-    // shapeJavanese(output);
-    // // Myanmar shaping
-    // shapeMyanmar(output);
+    // Buginese shaping
+    shapeBuginese(output);
+    // Javanese shaping
+    shapeJavanese(output);
+    // khmer
+    shapeKhmer(output);
+    // Myanmar shaping
+    shapeMyanmar(output);
     // Tamil shaping
     shapeTamil(output);
-    // // Tibetan shaping
-    // shapeTibetan(output);
-    // // khmer
-    // shapeKhmer(output);
+    // Tibetan shaping
+    shapeTibetan(output);
   }
 
   // if option to process bidirectional text is set, then reorder the output

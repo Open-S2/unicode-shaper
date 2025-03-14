@@ -28,8 +28,8 @@ wasm-opt = { version = "0.116.1" }
 [profile.release]
 # Tell `rustc` to optimize for small code size.
 opt-level = "z"
-lto = true
+lto = "fat"
 strip = true
-codegen-units = 1
+# codegen-units = 1 + lto
 panic = "abort"
 target = "wasm32-unknown-unknown"

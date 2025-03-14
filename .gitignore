@@ -7,3 +7,4 @@ util/test
 dist
 tsconfig.tsbuildinfo
 docs/
+coverage/

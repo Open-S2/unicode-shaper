@@ -220,7 +220,7 @@ pub fn shape_khmer(input: &mut [u16]) {
     let defs = Definition::build_definition(input);
     // Step 2: Split clusters by WS (white space)
     let mut clusters_sets = Cluster::build_clusters(&defs);
-    // Step 2: Reorder the clusters and add them to result
+    // Step 3: Reorder the clusters and add them to result
     clusters_sets.iter_mut().for_each(|c| {
         res.append(&mut c.get_sorted());
         // append whitespace of cluster if it exists

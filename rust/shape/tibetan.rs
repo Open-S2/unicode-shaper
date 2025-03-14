@@ -117,14 +117,14 @@ impl<'a> Cluster<'a> {
 
     /// The correct coding order for a stream of text is as follows:
     ///
-    /// * head position consonant
-    /// * first sub-joined consonant
-    /// * ....intermediate sub-joined consonants (if any)
-    /// * last sub-joined consonant
-    /// * sub-joined vowel (a-chung U+0F71)
-    /// * standard or compound vowel sign (including virama U+0F84 in the case of Sanskrit transliteration)
-    /// * additional vowel signs (if any)
-    /// * vowel modifier signs (rjes su nga ro U+0F7E, rnam bcad U+0F7F)
+    /// - head position consonant
+    /// - first sub-joined consonant
+    /// - ....intermediate sub-joined consonants (if any)
+    /// - last sub-joined consonant
+    /// - sub-joined vowel (a-chung U+0F71)
+    /// - standard or compound vowel sign (including virama U+0F84 in the case of Sanskrit transliteration)
+    /// - additional vowel signs (if any)
+    /// - vowel modifier signs (rjes su nga ro U+0F7E, rnam bcad U+0F7F)
     fn get_sorted(&mut self) -> Vec<u16> {
         // sort
         let mut idx: usize = 0;
@@ -178,7 +178,7 @@ pub fn shape_tibetan(input: &mut [u16]) {
     let defs = Definition::build_from_unicodes(input);
     // Step 2: Split clusters by WS (white space)
     let mut clusters_sets = Cluster::build_clusters(&defs);
-    // Step 2: Reorder the clusters and add them to result
+    // Step 3: Reorder the clusters and add them to result
     clusters_sets.iter_mut().for_each(|c| {
         res.append(&mut c.get_sorted());
         // append whitespace of cluster if it exists

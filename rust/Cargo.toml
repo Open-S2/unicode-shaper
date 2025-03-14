@@ -20,4 +20,8 @@ path = "lib.rs"
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.
-opt-level = "s"
+opt-level = "z"
+lto = "fat"
+strip = true
+# codegen-units = 1 + lto
+panic = "abort"

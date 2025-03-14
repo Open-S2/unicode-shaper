@@ -7,7 +7,7 @@ extern crate alloc;
 use alloc::vec::Vec;
 use core::mem;
 use lol_alloc::{AssumeSingleThreaded, FreeListAllocator};
-use unicode_shaper::*;
+use unicode_shaper::{is_cjk, is_rtl, shape_unicode};
 
 // SAFETY: This application is single threaded, so using AssumeSingleThreaded is allowed.
 #[global_allocator]

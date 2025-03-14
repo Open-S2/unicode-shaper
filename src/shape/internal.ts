@@ -41,20 +41,21 @@
 // <p>For details about the available operations, see the description of the
 // <code>U_SHAPE_...</code> options.</p>
 
-export const WHITESPACE =
-  0x0020 | // Space
-  0x0009 | // Tab
-  0x000a | // Line feed
-  0x000d | // Carriage return
-  0x000c | // Form feed
-  0x0085 | // Next line
-  0x3000 | // ideographic space
-  0x200b | // Zero width space
-  0x00a0 | // NO-BREAK SPACE
-  0x0f0c | // TIBETAN MARK DELIMITER TSHEG BSTAR
-  0x202f | // NARROW NO-BREAK SPACE
-  0x2060 | // WORD JOINER
-  0xfeff; // ZERO WIDTH NO-BREAK SPACE
+export const WHITESPACE = [
+  0x0020, // Space
+  0x0009, // Tab
+  0x000a, // Line feed
+  0x000d, // Carriage return
+  0x000c, // Form feed
+  0x0085, // Next line
+  0x3000, // ideographic space
+  0x200b, // Zero width space
+  0x00a0, // NO-BREAK SPACE
+  0x0f0c, // TIBETAN MARK DELIMITER TSHEG BSTAR
+  0x202f, // NARROW NO-BREAK SPACE
+  0x2060, // WORD JOINER
+  0xfeff,
+]; // ZERO WIDTH NO-BREAK SPACE
 
 /// definitions for Arabic letter shaping -----------------------------------
 export const IRRELEVANT = 4;

@@ -38,6 +38,27 @@ import {
 } from './internal';
 
 /**
+ * Check if a character is Arabic
+ * @param unicode - input unicode character
+ * @returns - True if Arabic
+ */
+export function isArabic(unicode: number): boolean {
+  // Arabic (0600–06FF, 256 characters)
+  if (unicode >= 0x0600 && unicode <= 0x06ff) return true;
+  // Arabic Supplement (0750–077F, 48 characters)
+  if (unicode >= 0x0750 && unicode <= 0x077f) return true;
+  // Arabic Extended-B (0870–089F, 42 characters)
+  if (unicode >= 0x0870 && unicode <= 0x089f) return true;
+  // Arabic Extended-A (08A0–08FF, 96 characters)
+  if (unicode >= 0x08a0 && unicode <= 0x08ff) return true;
+  // Arabic Presentation Forms-A (FB50–FDFF, 631 characters)
+  if (unicode >= 0xfb50 && unicode <= 0xfdff) return true;
+  // Arabic Presentation Forms-B (FE70–FEFF, 141 characters)
+  if (unicode >= 0xfe70 && unicode <= 0xfeff) return true;
+  return false;
+}
+
+/**
  * Converts the Alef characters into an equivalent
  * LamAlef location in the 0x06xx Range, this is an
  * intermediate stage in the operation of the program
