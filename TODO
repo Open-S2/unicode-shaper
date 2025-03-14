@@ -11,5 +11,3 @@ TODO: Copy Buginese for all the other existing shaping (javanese is fine):
 * fix joiner
 * add non-joiner
 * ensure whitespace is correct
-* migrate definition to `code: &'a [u16]`
-* definition->build... is now `build_definition` and properly creates clusters

@@ -1,7 +1,7 @@
 {
-  "name": "unicode-shaper-ts",
+  "name": "unicode-shaper",
   "type": "module",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Shape unicode text so that renderers like WebGL and WebGPU can properly display the glyphs.",
   "keywords": [
     "unicode",

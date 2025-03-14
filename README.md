@@ -6,22 +6,22 @@
   <a href="https://img.shields.io/github/actions/workflow/status/Open-S2/unicode-shaper/test.yml?logo=github">
     <img src="https://img.shields.io/github/actions/workflow/status/Open-S2/unicode-shaper/test.yml?logo=github" alt="GitHub Actions Workflow Status">
   </a>
-  <a href="https://npmjs.org/package/unicode-shaper-ts">
-    <img src="https://img.shields.io/npm/v/unicode-shaper-ts.svg?logo=npm&logoColor=white" alt="npm">
+  <a href="https://npmjs.org/package/unicode-shaper">
+    <img src="https://img.shields.io/npm/v/unicode-shaper.svg?logo=npm&logoColor=white" alt="npm">
   </a>
-  <a href="https://crates.io/crates/unicode-shaper-rs">
-    <img src="https://img.shields.io/crates/v/unicode-shaper-rs.svg?logo=rust&logoColor=white" alt="crate">
+  <a href="https://crates.io/crates/unicode-shaper">
+    <img src="https://img.shields.io/crates/v/unicode-shaper.svg?logo=rust&logoColor=white" alt="crate">
   </a>
-  <a href="https://bundlejs.com/?q=unicode-shaper-ts&treeshake=%5B%7B+shapeString+%7D%5D">
-    <img src="https://deno.bundlejs.com/badge?q=unicode-shaper-ts&treeshake=[{+shapeString+}]" alt="bundle">
+  <a href="https://bundlejs.com/?q=unicode-shaper&treeshake=%5B%7B+shapeString+%7D%5D">
+    <img src="https://deno.bundlejs.com/badge?q=unicode-shaper&treeshake=[{+shapeString+}]" alt="bundle">
   </a>
-  <a href="https://www.npmjs.com/package/unicode-shaper-ts">
-    <img src="https://img.shields.io/npm/dm/unicode-shaper-ts.svg" alt="downloads">
+  <a href="https://www.npmjs.com/package/unicode-shaper">
+    <img src="https://img.shields.io/npm/dm/unicode-shaper.svg" alt="downloads">
   </a>
   <a href="https://open-s2.github.io/unicode-shaper/">
     <img src="https://img.shields.io/badge/docs-typescript-yellow.svg" alt="docs-ts">
   </a>
-  <a href="https://docs.rs/unicode-shaper-rs">
+  <a href="https://docs.rs/unicode-shaper">
     <img src="https://img.shields.io/badge/docs-rust-yellow.svg" alt="docs-rust">
   </a>
   <a href="https://coveralls.io/github/Open-S2/unicode-shaper?branch=master">
@@ -67,13 +67,13 @@ Useful if you want to draw text as a vertical line for CJK characters.
 ## Install
 
 ```sh
-npm install unicode-shaper-ts
-pnpm add unicode-shaper-ts
-yarn add unicode-shaper-ts
-bun add unicode-shaper-ts
+npm install unicode-shaper
+pnpm add unicode-shaper
+yarn add unicode-shaper
+bun add unicode-shaper
 
 # Rust
-cargo add unicode-shaper-rs
+cargo add unicode-shaper
 ```
 
 ## Usage
@@ -81,7 +81,7 @@ cargo add unicode-shaper-rs
 ### Native typescript
 
 ```ts
-import { shapeString } from 'unicode-shaper-ts'
+import { shapeString } from 'unicode-shaper'
 const text = 'سلام۳۹' // [1587, 1604, 1575, 1605, 1779, 1785]
 const output = shapeString(input)
 console.log(output) // [1779, 1785, 65249, 65276, 65203]
@@ -91,7 +91,7 @@ console.log(output) // [1779, 1785, 65249, 65276, 65203]
 ### WASM Build
 
 ```ts
-    import { WasmTextShaper } from 'unicode-shaper-ts'
+    import { WasmTextShaper } from 'unicode-shaper'
     const wasm = new WasmTextShaper()
     const text = 'سلام۳۹' // [1587, 1604, 1575, 1605, 1779, 1785]
     const output = wasm.processString(input)

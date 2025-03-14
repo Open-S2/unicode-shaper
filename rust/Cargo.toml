@@ -1,5 +1,5 @@
 [package]
-name = "unicode-shaper-rs"
+name = "unicode-shaper"
 version = "0.2.0"
 edition = "2021"
 authors = ["Craig O'Connor <oconnorct1@gmail.com>"]

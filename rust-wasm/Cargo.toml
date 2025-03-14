@@ -3,7 +3,7 @@ name = "unicode-shaper-wasm"
 version = "0.2.0"
 edition = "2021"
 authors = ["Craig O'Connor <oconnorct1@gmail.com>"]
-description = "This is a wasm build of unicode-shaper-rs"
+description = "This is a wasm build of unicode-shaper"
 documentation = "https://docs.rs/unicode-shaper"
 homepage = "https://github.com/OpenS2/unicode-shaper"
 repository = "https://github.com/OpenS2/unicode-shaper"
@@ -20,7 +20,7 @@ path = "lib.rs"
 
 [dependencies]
 lol_alloc = { version = "0.4.1" }
-unicode-shaper-rs = { path = "../rust" }
+unicode-shaper = { path = "../rust" }
 
 [dev-dependencies]
 wasm-opt = { version = "0.116.1" }
