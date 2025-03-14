@@ -1,35 +1,11 @@
-[package]
-name = "unicode-shaper-rs"
-version = "0.2.0"
-edition = "2021"
-authors = ["Craig O'Connor <oconnorct1@gmail.com>"]
-description = "This library reads/writes The Open Vector Tiles 1.0 Specification"
-documentation = "https://docs.rs/unicode-shaper"
-homepage = "https://github.com/OpenS2/unicode-shaper"
-repository = "https://github.com/OpenS2/unicode-shaper"
-readme = "../README.md"
-categories = ["encoding", "wasm", "embedded", "no-std"]
-keywords = ["open", "vector", "shape", "unicode", "low-cost-code"]
-license = "MIT"
+[workspace]
+members = ["rust", "rust-wasm"]
+default-members = ["rust"]
+resolver = "2"
 
-[lib]
-name = "unicode_shaper"
-path = "rust/lib.rs"
-
-[features]
-wasm32 = ["wasm-opt"]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-lol_alloc = { version = "0.4.1" }
-wasm-opt = { version = "0.116.1", optional = true }
+[profile.bench]
+opt-level = 3
 
 [profile.release]
-# Tell `rustc` to optimize for small code size.
-opt-level = "z"
 lto = true
-strip = true
 codegen-units = 1
-panic = "abort"
-target = "wasm32-unknown-unknown"

@@ -316,8 +316,13 @@ checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
 [[package]]
 name = "unicode-shaper-rs"
 version = "0.2.0"
+
+[[package]]
+name = "unicode-shaper-wasm"
+version = "0.2.0"
 dependencies = [
  "lol_alloc",
+ "unicode-shaper-rs",
  "wasm-opt",
 ]
 

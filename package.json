@@ -54,21 +54,18 @@
   "scripts": {
     "build": "rm -rf dist && mkdir dist && bun build:rust && rm -f -- tsconfig.tsbuildinfo && tsc",
     "build:rust": "bun build:rust:cargo && bun build:rust:optimize && bun build:rust:strip && bun build:rust:ts",
-    "build:rust:cargo": "RUSTFLAGS=\"-Z location-detail=none -Z fmt-debug=none\" cargo build --target wasm32-unknown-unknown --release",
-    "build:rust:optimize": "wasm-opt -Oz --vacuum -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_rust.wasm",
+    "build:rust:cargo": "RUSTFLAGS=\"-Z location-detail=none -Z fmt-debug=none\" cargo build --target wasm32-unknown-unknown --release --workspace --package rust-wasm",
+    "build:rust:optimize": "wasm-opt -Oz --vacuum -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_wasm.wasm",
     "build:rust:strip": "wasm-strip target/wasm32-unknown-unknown/release/optimized.wasm",
-    "build:rust:snip": "wasm-snip --snip-rust-fmt-code --snip-rust-panicking-code -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_rust.wasm",
+    "build:rust:snip": "wasm-snip --snip-rust-fmt-code --snip-rust-panicking-code -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_wasm.wasm",
     "build:rust:twiggy": "twiggy top target/wasm32-unknown-unknown/release/optimized.wasm",
     "build:rust:ts": "bun run build-wasm.ts",
-    "cargo:test": "cargo test --target wasm32-unknown-unknown",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "types": "tsc --project tsconfig.types.json",
-    "prepare": "bun run lint && bun run build && bun run test && bun run types",
+    "prepare": "bun run lint && bun run build && bun test",
     "package-check": "package-check",
     "test": "cargo test && bun clippy && bun test",
     "test:dev": "bun test --watch",
-    "clippy": "cargo clippy --target wasm32-unknown-unknown",
-    "bacon": "bacon -- --target wasm32-unknown-unknown"
+    "clippy": "cargo clippy --target wasm32-unknown-unknown"
   }
 }
