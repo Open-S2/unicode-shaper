@@ -1,8 +1,7 @@
 // https://www.unicode.org/charts/PDF/U0600.pdf
 // https://r12a.github.io/scripts/arab/arb.html
-use alloc::vec::Vec;
-
 use crate::*;
+use alloc::vec::Vec;
 use core::cmp::max;
 
 // enum ShapeError {

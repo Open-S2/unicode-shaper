@@ -41,6 +41,20 @@
 // <p>For details about the available operations, see the description of the
 // <code>U_SHAPE_...</code> options.</p>
 
+pub const WHITESPACE: u16 = 0x0020 | // Space
+    0x0009 | // Tab
+    0x000A | // Line feed
+    0x000D | // Carriage return
+    0x000C | // Form feed
+    0x0085 | // Next line
+    0x3000 | // ideographic space
+    0x200B | // Zero width space
+    0x00A0 | // NO-BREAK SPACE
+    0x0F0C | // TIBETAN MARK DELIMITER TSHEG BSTAR
+    0x202F | // NARROW NO-BREAK SPACE
+    0x2060 | // WORD JOINER
+    0xFEFF; // ZERO WIDTH NO-BREAK SPACE
+
 /// definitions for Arabic letter shaping -----------------------------------
 pub const IRRELEVANT: u16 = 4;
 pub const LAMTYPE: u16 = 16;
@@ -1111,9 +1125,8 @@ pub static SHAPE_TABLE: [[[u8; 4]; 4]; 4] = [
     [[0, 0, 1, 2], [0, 0, 1, 2], [0, 1, 1, 2], [0, 1, 1, 3]],
 ];
 
-pub const TAMIL_VOWELS: [u16; 11] = [
-    3006, 3007, 3008, 3009, 3010, 3011, 3012, 3013, 3014, 3015, 3016,
-];
+pub const TAMIL_VOWELS: [u16; 11] =
+    [3006, 3007, 3008, 3009, 3010, 3011, 3012, 3013, 3014, 3015, 3016];
 
 pub const KHMER_SIGN_COENG: u16 = 0x17D2; // 6098
 

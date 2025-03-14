@@ -1,5 +1,5 @@
 {
-  "name": "unicode-shaper-rust",
+  "name": "unicode-shaper-ts",
   "type": "module",
   "version": "0.5.0",
   "description": "Shape unicode text so that renderers like WebGL and WebGPU can properly display the glyphs.",
@@ -14,44 +14,55 @@
   "exports": {
     ".": "./dist/index.js"
   },
-  "directories": {
-    "lib": "dist"
-  },
-  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "typescript": {
-    "main": "lib/index.ts"
+    "main": "src/index.ts"
   },
-  "files": ["dist", "lib"],
+  "main": "dist/index.js",
+  "files": [
+    "assets",
+    "dist",
+    "src"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Open-S2/unicode-parser-rust.git"
+    "url": "git+https://github.com/Open-S2/unicode-shaper.git"
   },
   "author": "Craig OConnor",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Open-S2/unicode-parser-rust/issues"
+    "url": "https://github.com/Open-S2/unicode-shaper/issues"
   },
-  "homepage": "https://github.com/Open-S2/unicode-parser-rust#readme",
+  "homepage": "https://github.com/Open-S2/unicode-shaper#readme",
   "devDependencies": {
     "@skypack/package-check": "^0.2.2",
-    "@typescript-eslint/parser": "latest",
-    "bun-types": "^1.1.3",
-    "eslint": "^8.44.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-config-standard-with-typescript": "^36.0.0",
-    "ts-standard": "*",
-    "typescript": "latest"
+    "@types/bun": "^1.2.5",
+    "@types/node": "^22.13.10",
+    "coveralls": "^3.1.1",
+    "dependency-cruiser": "^16.10.0",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-jsdoc": "^50.6.6",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-tsdoc": "^0.4.0",
+    "prettier": "^3.5.3",
+    "typedoc": "^0.27.9",
+    "typedoc-plugin-coverage": "^3.4.1",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1"
   },
   "scripts": {
-    "build": "bun run build:rust && bun run build:ts",
-    "build:ts": "rm -rf dist && mkdir dist && bun build.ts",
-    "build:rust": "bun build:rust:cargo && bun build:rust:optimize && bun build:rust:strip",
-    "build:rust:cargo": "cargo build --target wasm32-unknown-unknown --release",
-    "build:rust:optimize": "wasm-opt -O3 -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_rust.wasm",
+    "build": "rm -rf dist && mkdir dist && bun build:rust && rm -f -- tsconfig.tsbuildinfo && tsc",
+    "build:rust": "bun build:rust:cargo && bun build:rust:optimize && bun build:rust:strip && bun build:rust:ts",
+    "build:rust:cargo": "RUSTFLAGS=\"-Z location-detail=none -Z fmt-debug=none\" cargo build --target wasm32-unknown-unknown --release",
+    "build:rust:optimize": "wasm-opt -Oz --vacuum -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_rust.wasm",
     "build:rust:strip": "wasm-strip target/wasm32-unknown-unknown/release/optimized.wasm",
-    "lint": "eslint lib/",
-    "lint:fix": "eslint lib/ --fix",
+    "build:rust:snip": "wasm-snip --snip-rust-fmt-code --snip-rust-panicking-code -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_rust.wasm",
+    "build:rust:twiggy": "twiggy top target/wasm32-unknown-unknown/release/optimized.wasm",
+    "build:rust:ts": "bun run build-wasm.ts",
+    "cargo:test": "cargo test --target wasm32-unknown-unknown",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     "types": "tsc --project tsconfig.types.json",
     "prepare": "bun run lint && bun run build && bun run test && bun run types",
     "package-check": "package-check",

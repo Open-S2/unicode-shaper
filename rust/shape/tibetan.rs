@@ -2,26 +2,12 @@
 // https://www.unicode.org/charts/PDF/U0F00.pdf
 // https://r12a.github.io/scripts/tibt/bo.html
 
+use crate::WHITESPACE;
 use alloc::vec::Vec;
 
 pub fn is_tibetan(c: &u16) -> bool {
     *c >= 0x0F00 && *c <= 0x0FFF
 }
-
-const WHITESPACE: u16 =
-    0x0020 | // Space
-    0x0009 | // Tab
-    0x000A | // Line feed
-    0x000D | // Carriage return
-    0x000C | // Form feed
-    0x0085 | // Next line
-    0x3000 | // ideographic space
-    0x200B | // Zero width space
-    0x00A0 | // NO-BREAK SPACE
-    0x0F0C | // TIBETAN MARK DELIMITER TSHEG BSTAR
-    0x202F | // NARROW NO-BREAK SPACE
-    0x2060 | // WORD JOINER
-    0xFEFF; // ZERO WIDTH NO-BREAK SPACE
 
 #[derive(Debug, Clone, PartialEq)]
 enum MType {
@@ -37,7 +23,7 @@ enum MType {
     // GB, // Generic base character (00A0, 00D7, 2012, 2013, 2014, 2022, 25CC, and 25FB–25FE)
     // ZJ, // ZWJ/ZWNJ (200C, 200D)
     // O, // All other chars from the Tibetan block (0F00–0F0A, 0F0D–0F17, 0F1A–0F1F, 0F36, 0F38, 0F3A–0F3B, 0FBE–0FC5, 0FC7–0FD1, 0FD3–0FDA)
-    U, // Unicode chars or tibetan chars that don't need to be processed
+    U,  // Unicode chars or tibetan chars that don't need to be processed
     WS, // WHITESPACE
 }
 impl MType {
@@ -94,9 +80,7 @@ impl<'a> Definition<'a> {
         let mut idx: usize = 0;
         while idx < input.len() {
             let code = &input[idx];
-            clusters.push(
-                Definition::new(MType::from_u16(code), code)
-            );
+            clusters.push(Definition::new(MType::from_u16(code), code));
             idx += 1;
         }
 
@@ -108,7 +92,7 @@ struct Cluster<'a> {
     pub defs: Vec<Definition<'a>>,
     pub whitespace: Option<&'a u16>,
 }
-impl <'a> Cluster<'a> {
+impl<'a> Cluster<'a> {
     fn new(defs: Vec<Definition<'a>>, whitespace: Option<&'a u16>) -> Self {
         Self { defs, whitespace }
     }
@@ -149,18 +133,22 @@ impl <'a> Cluster<'a> {
                 MType::Va | MType::Vb | MType::Vc => {
                     // always put the head position consonant infront of the head letter
                     let mut head_idx = idx;
-                    while head_idx > 0 && self.defs[head_idx].m_type != MType::Lh { head_idx -= 1; }
+                    while head_idx > 0 && self.defs[head_idx].m_type != MType::Lh {
+                        head_idx -= 1;
+                    }
                     let vowel_mark = self.defs.remove(idx);
                     self.defs.insert(head_idx, vowel_mark);
-                },
-                _ => {},
+                }
+                _ => {}
             }
             idx += 1;
         }
 
         // store
         let mut reordered = Vec::with_capacity(self.defs.len());
-        for def in &self.defs { reordered.push(*def.code) }
+        for def in &self.defs {
+            reordered.push(*def.code)
+        }
 
         reordered
     }
@@ -178,7 +166,7 @@ impl <'a> Cluster<'a> {
 ///    as a block to the beginning of the cluster.
 /// 4) Anusvara (A) coming immediately after one or more below-base vowels (VBlw)
 ///    will reorder immediately before them.
-/// 
+///
 /// Cases:
 /// 1) Letters: Lh [Ls*] <[Va*] | [Vb] | [Vc] > [Ml]
 /// 2) Digits: D [Md]
@@ -194,7 +182,9 @@ pub fn shape_tibetan(input: &mut [u16]) {
     clusters_sets.iter_mut().for_each(|c| {
         res.append(&mut c.get_sorted());
         // append whitespace of cluster if it exists
-        if let Some(ws) = c.whitespace { res.push(*ws); }
+        if let Some(ws) = c.whitespace {
+            res.push(*ws);
+        }
     });
 
     // now map the result to the original input
@@ -208,7 +198,10 @@ mod tests {
     #[test]
     fn tibetan_test_above_base() {
         let input = "བོད་རང་སྐྱོང་ལྗོངས།";
-        let expected: &[u16] = &[3964, 3926, 3921, 3851, 3938, 3908, 3851, 3964, 3942, 3984, 4017, 3908, 3851, 3964, 3939, 3991, 3908, 3942, 3853];
+        let expected: &[u16] = &[
+            3964, 3926, 3921, 3851, 3938, 3908, 3851, 3964, 3942, 3984, 4017, 3908, 3851, 3964,
+            3939, 3991, 3908, 3942, 3853,
+        ];
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         // Create a reference to the slice

@@ -1,46 +1,35 @@
-extern crate alloc;
-use alloc::vec::Vec;
-use core::cell::RefCell;
+/// Module for bidi processing
+mod internal;
 
-use crate::{find_dominant_type, get_type, mirror_adjust_string, Type};
+use alloc::vec::Vec;
+pub use internal::*;
 
 struct Line {
     pub start: usize,
     pub end: usize,
 }
 
+#[derive(Copy, Clone)]
 struct Chunk {
-    pub start: RefCell<usize>,
-    pub end: RefCell<usize>,
-    pub r#type: RefCell<Type>,
+    pub start: usize,
+    pub end: usize,
+    pub r#type: Type,
 }
 impl Chunk {
     pub fn new(start: usize, end: usize, r#type: Type) -> Chunk {
-        Chunk {
-            start: RefCell::new(start),
-            end: RefCell::new(end),
-            r#type: RefCell::new(r#type),
-        }
+        Chunk { start, end, r#type }
     }
 
     pub fn is_type(&self, t: Type) -> bool {
-        *self.r#type.borrow() == t
+        self.r#type == t
     }
 
-    pub fn set_type(&self, t: Type) {
-        *self.r#type.borrow_mut() = t;
+    pub fn set_type(&mut self, t: Type) {
+        self.r#type = t;
     }
 
-    pub fn set_chunk_type(&self, c: &Chunk) {
-        *self.r#type.borrow_mut() = *c.r#type.borrow();
-    }
-
-    pub fn get_start(&self) -> usize {
-        *self.start.borrow()
-    }
-
-    pub fn get_end(&self) -> usize {
-        *self.end.borrow()
+    pub fn set_chunk_type(&mut self, c: &Chunk) {
+        self.r#type = c.r#type;
     }
 }
 
@@ -70,10 +59,7 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
     }
     // store the last line
     if start < input.len() {
-        lines.push(Line {
-            start,
-            end: input.len(),
-        });
+        lines.push(Line { start, end: input.len() });
     }
     // step 2: iterate lines
     for (line_idx, line) in lines.iter().enumerate() {
@@ -110,24 +96,18 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
         // update neutral and weak chunks
         let word_chunks_len = word_chunks.len();
         for idx in 0..word_chunks_len {
-            let chunk = word_chunks.get(idx).unwrap();
-            let prev: Option<&Chunk> = if idx == 0 {
-                None
-            } else {
-                word_chunks.get(idx - 1)
-            };
-            let next: Option<&Chunk> = if idx == word_chunks_len - 1 {
-                None
-            } else {
-                word_chunks.get(idx + 1)
-            };
+            let prev: Option<Chunk> =
+                if idx == 0 { None } else { word_chunks.get(idx - 1).cloned() };
+            let next: Option<Chunk> =
+                if idx == word_chunks_len - 1 { None } else { word_chunks.get(idx + 1).cloned() };
+            let chunk = word_chunks.get_mut(idx).unwrap();
             if chunk.is_type(Type::Neutral) {
                 if idx == 0 {
-                    chunk.set_chunk_type(next.unwrap());
+                    chunk.set_chunk_type(&next.unwrap());
                 } else if idx == word_chunks_len - 1 {
                     continue;
                 } else if prev.unwrap().r#type == next.unwrap().r#type {
-                    chunk.set_chunk_type(prev.unwrap());
+                    chunk.set_chunk_type(&prev.unwrap());
                 } else {
                     chunk.set_type(if dominant_rtl { Type::Rtl } else { Type::Ltr });
                 }
@@ -144,10 +124,8 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
         let mut i: isize = 0;
         while i < (word_chunks.len() as isize - 1) {
             let idx: usize = i.try_into().unwrap();
-            let curr = &word_chunks[idx];
-            let next = &word_chunks[idx + 1];
-            if curr.r#type == next.r#type {
-                *curr.end.borrow_mut() = *next.end.borrow();
+            if word_chunks[idx].r#type == word_chunks[idx + 1].r#type {
+                word_chunks[idx].end = word_chunks[idx + 1].end;
                 word_chunks.remove(idx + 1);
                 i -= 1;
             }
@@ -159,7 +137,7 @@ pub fn process_bidi_text(input: &[u16]) -> Vec<u16> {
         }
         // s2.4: Store each part, reversing each chunk as needed
         for chunk in word_chunks {
-            let mut chunk_vec = line_str[chunk.get_start()..chunk.get_end()].to_vec();
+            let mut chunk_vec = line_str[chunk.start..chunk.end].to_vec();
             let chunk_str = chunk_vec.as_mut_slice();
             if chunk.is_type(Type::Rtl) {
                 chunk_str.reverse();

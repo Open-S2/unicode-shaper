@@ -1,4 +1,5 @@
 #![no_std]
+#![no_main]
 
 extern crate alloc;
 #[cfg(target_arch = "wasm32")]
@@ -6,31 +7,11 @@ use alloc::vec::Vec;
 #[cfg(target_arch = "wasm32")]
 use core::mem;
 
-// Export all public items from ubidi_internal
-pub use ubidi_internal::*;
-// Export all public items from shapes
-pub use shape_arabic::*;
-pub use shape_buginese::*;
-pub use shape_internal::*;
-pub use shape_javanese::*;
-pub use shape_khmer::*;
-pub use shape_myanmar::*;
-pub use shape_tibetan::*;
-pub use shape::*;
-// Export all public items from ubidi
-pub use ubidi::*;
+pub mod shape;
+pub mod ubidi;
 
-// Declare the modules
-mod shape_arabic;
-mod shape_buginese;
-mod shape_internal;
-mod shape_javanese;
-mod shape_khmer;
-mod shape_myanmar;
-mod shape_tibetan;
-mod shape;
-mod ubidi_internal;
-mod ubidi;
+pub use shape::*;
+pub use ubidi::*;
 
 #[cfg(target_arch = "wasm32")]
 use lol_alloc::{AssumeSingleThreaded, FreeListAllocator};
@@ -43,10 +24,10 @@ static ALLOCATOR: AssumeSingleThreaded<FreeListAllocator> =
 
 #[cfg(target_arch = "wasm32")]
 mod wasm_specific {
-#[panic_handler]
-fn panic(_info: &core::panic::PanicInfo) -> ! {
-    loop {}
-}
+    #[panic_handler]
+    fn panic(_info: &core::panic::PanicInfo) -> ! {
+        loop {}
+    }
 }
 
 // Declare the external JavaScript function
@@ -101,11 +82,13 @@ pub unsafe extern "C" fn free(ptr: *mut u16, size: usize) {
     alloc::alloc::dealloc(ptr as *mut u8, alloc::alloc::Layout::array::<u16>(size).unwrap());
 }
 
+#[cfg(target_arch = "wasm32")]
 #[no_mangle]
 pub extern "C" fn isRTL(input: u16) -> bool {
     is_rtl(&input)
 }
 
+#[cfg(target_arch = "wasm32")]
 #[no_mangle]
 pub extern "C" fn isCJK(input: u16) -> bool {
     is_cjk(&input)

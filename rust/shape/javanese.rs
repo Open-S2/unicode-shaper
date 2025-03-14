@@ -1,24 +1,12 @@
 // https://www.unicode.org/charts/PDF/UA980.pdf
 // https://r12a.github.io/scripts/java/jv.html
+use crate::WHITESPACE;
 use alloc::vec::Vec;
 
 pub fn is_javanese(c: &u16) -> bool {
     // A980–A9DF
     *c >= 0xA980 && *c <= 0xA9DF
 }
-
-const WHITESPACE: u16 = 0x0020 | // Space
-    0x0009 | // Tab
-    0x000A | // Line feed
-    0x000D | // Carriage return
-    0x000C | // Form feed
-    0x0085 | // Next line
-    0x3000 | // ideographic space
-    0x200B | // Zero width space
-    0x00A0 | // NO-BREAK SPACE
-    0x202F | // NARROW NO-BREAK SPACE
-    0x2060 | // WORD JOINER
-    0xFEFF; // ZERO WIDTH NO-BREAK SPACE
 
 #[derive(Debug, Clone, PartialEq)]
 enum MType {
@@ -147,10 +135,7 @@ impl<'a> Cluster<'a> {
         let mut def_idx = 0;
         for idx in 0..defs.len() {
             if defs[idx].m_type == MType::WS || defs[idx].m_type == MType::NJ {
-                clusters.push(Cluster::new(
-                    defs[def_idx..idx].to_vec(),
-                    Some(&defs[idx].code[0]),
-                ));
+                clusters.push(Cluster::new(defs[def_idx..idx].to_vec(), Some(&defs[idx].code[0])));
                 def_idx = idx + 1;
             }
         }
@@ -238,12 +223,8 @@ mod tests {
 
     #[test]
     fn javanese_test() {
-        let input: &[u16] = &[
-            0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9BA, 0xA9BA, 0xA9B7,
-        ];
-        let expected: &[u16] = &[
-            0xA9BA, 0xA9BA, 0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9B7,
-        ];
+        let input: &[u16] = &[0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9BA, 0xA9BA, 0xA9B7];
+        let expected: &[u16] = &[0xA9BA, 0xA9BA, 0xA98F, 0xA9C0, 0xA98F, 0xA9BF, 0xA9BE, 0xA9B7];
         let mut result = input.to_vec();
         shape_javanese(&mut result);
         assert_eq!(result, expected);
@@ -252,9 +233,8 @@ mod tests {
     #[test]
     fn javanese_2_test() {
         let input = "ꦧꦺꦲꦏ꧀ꦠꦸꦩꦿꦥ꧀ꦲ";
-        let expected: &[u16] = &[
-            43450, 43431, 43442, 43407, 43456, 43424, 43448, 43433, 43455, 43429, 43456, 43442,
-        ];
+        let expected: &[u16] =
+            &[43450, 43431, 43442, 43407, 43456, 43424, 43448, 43433, 43455, 43429, 43456, 43442];
         // Encode the string as UTF-16 and obtain a slice of u16 values
         let input_utf16_slice: Vec<u16> = input.encode_utf16().collect();
         // Create a reference to the slice

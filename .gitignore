@@ -5,3 +5,4 @@ rtl.js
 rtl.js.map
 util/test
 dist
+tsconfig.tsbuildinfo

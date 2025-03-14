@@ -4,6 +4,7 @@
 // https://r12a.github.io/scripts/mymr/my.html
 // https://r12a.github.io/scripts/mymr/shn.html
 
+use crate::WHITESPACE;
 use alloc::vec::Vec;
 
 pub fn is_myanmar(c: &u16) -> bool {
@@ -15,24 +16,11 @@ pub fn is_myanmar(c: &u16) -> bool {
     *c >= 0xA9E0 && *c <= 0xA9FF
 }
 
-const WHITESPACE: u16 = 0x0020 | // Space
-    0x0009 | // Tab
-    0x000A | // Line feed
-    0x000D | // Carriage return
-    0x000C | // Form feed
-    0x0085 | // Next line
-    0x3000 | // ideographic space
-    0x200B | // Zero width space
-    0x00A0 | // NO-BREAK SPACE
-    0x202F | // NARROW NO-BREAK SPACE
-    0x2060 | // WORD JOINER
-    0xFEFF; // ZERO WIDTH NO-BREAK SPACE
-
 #[derive(Clone, PartialEq)]
 enum MType {
     A, // Anusvara class (1032, 1036)
     // As, // Asat (103A)
-    C, // Consonants and Independent vowels (1000-1020, 103F, 104E, 1050, 1051, 105A-105D, 1061, 1065, 1066, 106E-1070, 1075-1081, 108E, AA60-AA6F, AA71-AA76, AA7A)
+    C, /* Consonants and Independent vowels (1000-1020, 103F, 104E, 1050, 1051, 105A-105D, 1061, 1065, 1066, 106E-1070, 1075-1081, 108E, AA60-AA6F, AA71-AA76, AA7A) */
     // D, // Myanmar digits except zero (1041-1049, 1090-1099)
     // D0, // Myanmar digit zero (1040)
     // DB, // Dot below (1037)
@@ -160,10 +148,7 @@ impl<'a> Definition<'a> {
             let code = &input[idx];
             let may_be_kinzi_sequence: bool =
                 idx + 2 < input.len() && input[idx + 1] == 0x103A && input[idx + 2] == 0x1039;
-            clusters.push(Definition::new(
-                MType::from_u16(code, may_be_kinzi_sequence),
-                code,
-            ));
+            clusters.push(Definition::new(MType::from_u16(code, may_be_kinzi_sequence), code));
             if may_be_kinzi_sequence {
                 idx += 3;
             } else {
@@ -190,10 +175,7 @@ impl<'a> Cluster<'a> {
         let mut def_idx = 0;
         for idx in 0..defs.len() {
             if defs[idx].m_type == MType::WS {
-                clusters.push(Cluster::new(
-                    defs[def_idx..idx].to_vec(),
-                    Some(defs[idx].code),
-                ));
+                clusters.push(Cluster::new(defs[def_idx..idx].to_vec(), Some(defs[idx].code)));
                 def_idx = idx + 1;
             }
         }
