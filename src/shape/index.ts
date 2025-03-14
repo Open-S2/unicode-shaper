@@ -23,7 +23,7 @@ export function sharedShaper(input: number[], comparitor: number[]): void {
  * Converts Tamil Unicode buffer into a shaped Tamil Unicode buffer
  * @param input - input unicode buffer
  */
-export function shape_tamil(input: number[]): void {
+export function shapeTamil(input: number[]): void {
   sharedShaper(input, TAMIL_VOWELS);
 }
 
@@ -48,8 +48,8 @@ export function shapeUnicode(source: number[], options: number): number[] {
     // shapeJavanese(output);
     // // Myanmar shaping
     // shapeMyanmar(output);
-    // // Tamil shaping
-    // shapeTamil(output);
+    // Tamil shaping
+    shapeTamil(output);
     // // Tibetan shaping
     // shapeTibetan(output);
     // // khmer
