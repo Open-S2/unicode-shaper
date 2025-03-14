@@ -3,3 +3,4 @@ UnicodeData.txt
 node_modules
 target
 tsconfig.tsbuildinfo
+docs/
