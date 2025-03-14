@@ -2,6 +2,7 @@ import { processBidiText } from '../ubidi';
 import { shapeArabic } from './arabic';
 import { TAMIL_VOWELS, U_SHAPE_DIRECTION_OUTPUT_BIDI, U_SHAPE_LETTERS_MASK } from './internal';
 
+export * from './arabic';
 export * from './internal';
 
 /**

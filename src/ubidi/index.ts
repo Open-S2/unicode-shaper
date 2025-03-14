@@ -1,5 +1,7 @@
 import { Type, findDominantType, getType, mirrorAdjustString } from './internal';
 
+export * from './internal';
+
 /** Basic Line tracker */
 interface Line {
   start: number;
