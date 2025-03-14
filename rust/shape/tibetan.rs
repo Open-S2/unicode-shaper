@@ -15,7 +15,7 @@ enum MType {
     // Ls, // Subjoined letters (0F8D–0F8F, 0F90–0FBC)
     Va, // Vowel marks: Above-base (0F72, 0F7A–D, 0F80)
     Vb, // Vowel marks: Below-base (0F71, 0F74)
-    Vc, // Vowel marks: Compound vowels (0F73, 0F75–0F79, 0F81) [NOTE: Use of these characters is discouraged in favor of their decomposed equivalents.]
+    Vc, /* Vowel marks: Compound vowels (0F73, 0F75–0F79, 0F81) [NOTE: Use of these characters is discouraged in favor of their decomposed equivalents.] */
     // Ml, // Letter modifiers (0F35, 0F37, 0F39, 0F7E–0F7F, 0F82–0F84, 0F86–0F87, 0FC6)
     // Md, // Digit modifiers (0F18–0F19, 0F3E–0F3F)
     // SD, // Syllable delimiter (0F0B–0F0C, 0F34, 0FD2)
