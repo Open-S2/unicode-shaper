@@ -1,4 +1,36 @@
-# unicode-shaper-rust
+<h1 style="text-align: center;">
+<div align="center">unicode-shaper</div>
+</h1>
+
+<p align="center">
+  <a href="https://img.shields.io/github/actions/workflow/status/Open-S2/unicode-shaper/test.yml?logo=github">
+    <img src="https://img.shields.io/github/actions/workflow/status/Open-S2/unicode-shaper/test.yml?logo=github" alt="GitHub Actions Workflow Status">
+  </a>
+  <a href="https://npmjs.org/package/unicode-shaper-ts">
+    <img src="https://img.shields.io/npm/v/unicode-shaper-ts.svg?logo=npm&logoColor=white" alt="npm">
+  </a>
+  <a href="https://crates.io/crates/unicode-shaper-rs">
+    <img src="https://img.shields.io/crates/v/unicode-shaper-rs.svg?logo=rust&logoColor=white" alt="crate">
+  </a>
+  <a href="https://bundlejs.com/?q=unicode-shaper-ts&treeshake=%5B%7B+shapeString+%7D%5D">
+    <img src="https://deno.bundlejs.com/badge?q=unicode-shaper-ts&treeshake=[{+shapeString+}]" alt="bundle">
+  </a>
+  <a href="https://www.npmjs.com/package/unicode-shaper-ts">
+    <img src="https://img.shields.io/npm/dm/unicode-shaper-ts.svg" alt="downloads">
+  </a>
+  <a href="https://open-s2.github.io/unicode-shaper/">
+    <img src="https://img.shields.io/badge/docs-typescript-yellow.svg" alt="docs-ts">
+  </a>
+  <a href="https://docs.rs/unicode-shaper-rs">
+    <img src="https://img.shields.io/badge/docs-rust-yellow.svg" alt="docs-rust">
+  </a>
+  <a href="https://coveralls.io/github/Open-S2/unicode-shaper?branch=master">
+    <img src="https://coveralls.io/repos/github/Open-S2/unicode-shaper/badge.svg?branch=master" alt="code-coverage">
+  </a>
+  <a href="https://discord.opens2.com">
+    <img src="https://img.shields.io/discord/953563031701426206?logo=discord&logoColor=white" alt="Discord">
+  </a>
+</p>
 
 A [Rust](https://github.com/rust-lang/rust) port of a subset of the functionality of [International Components for Unicode (ICU)](http://site.icu-project.org/). Supports right-to-left langauges like Arabic and Hebrew.
 
@@ -35,17 +67,32 @@ Useful if you want to draw text as a vertical line for CJK characters.
 ## Install
 
 ```sh
-npm install unicode-shaper-rust
-pnpm add unicode-shaper-rust
-yarn add unicode-shaper-rust
-bun add unicode-shaper-rust
+npm install unicode-shaper-ts
+pnpm add unicode-shaper-ts
+yarn add unicode-shaper-ts
+bun add unicode-shaper-ts
+
+# Rust
+cargo add unicode-shaper-rs
 ```
 
-## Example
+## Usage
+
+### Native typescript
 
 ```ts
-    import WASM from 'unicode-shaper-rust'
-    const wasm = new WASM()
+import { shapeString } from 'unicode-shaper-ts'
+const text = 'سلام۳۹' // [1587, 1604, 1575, 1605, 1779, 1785]
+const output = shapeString(input)
+console.log(output) // [1779, 1785, 65249, 65276, 65203]
+// => '۳۹ﻡﻼﺳ'
+```
+
+### WASM Build
+
+```ts
+    import { WasmTextShaper } from 'unicode-shaper-ts'
+    const wasm = new WasmTextShaper()
     const text = 'سلام۳۹' // [1587, 1604, 1575, 1605, 1779, 1785]
     const output = wasm.processString(input)
     console.log(output) // [1779, 1785, 65249, 65276, 65203]
