@@ -52,6 +52,12 @@
     "typescript-eslint": "^8.26.1"
   },
   "scripts": {
+    "lint+build+test+docs": "bun run lint && bun run build && bun run test && bun run docs",
+    "lint": "eslint src tests",
+    "lint:fix": "bun run lint -- --fix",
+    "prettier": "bunx prettier src test tools benchmarks --check",
+    "prettier:fix": "bunx prettier -- --write",
+    "format": "bunx prettier:fix && bun run lint:fix",
     "build": "rm -rf dist && mkdir dist && bun build:rust && rm -f -- tsconfig.tsbuildinfo && tsc",
     "build:rust": "bun build:rust:cargo && bun build:rust:optimize && bun build:rust:strip && bun build:rust:ts",
     "build:rust:cargo": "RUSTFLAGS=\"-Z location-detail=none -Z fmt-debug=none\" cargo build --target wasm32-unknown-unknown --release --workspace --package rust-wasm",
@@ -60,12 +66,11 @@
     "build:rust:snip": "wasm-snip --snip-rust-fmt-code --snip-rust-panicking-code -o target/wasm32-unknown-unknown/release/optimized.wasm target/wasm32-unknown-unknown/release/unicode_shaper_wasm.wasm",
     "build:rust:twiggy": "twiggy top target/wasm32-unknown-unknown/release/optimized.wasm",
     "build:rust:ts": "bun run build-wasm.ts",
-    "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix",
-    "prepare": "bun run lint && bun run build && bun test",
+    "prepublishOnly": "bun run lint+build+test+docs",
     "package-check": "package-check",
     "test": "cargo test && bun clippy && bun test",
     "test:dev": "bun test --watch",
+    "docs": "bunx typedoc",
     "clippy": "cargo clippy --target wasm32-unknown-unknown"
   }
 }
