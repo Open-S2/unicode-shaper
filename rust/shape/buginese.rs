@@ -1,9 +1,10 @@
 // https://www.unicode.org/charts/PDF/U1A00.pdf
 // https://r12a.github.io/scripts/bugi/bug.html
 
-use crate::WHITESPACE;
+use crate::shape::*;
 use alloc::vec::Vec;
 
+/// Check if a character is Buginese
 pub fn is_buginese(c: &u16) -> bool {
     // main 1A00–1A1F
     *c >= 0x1A00 && *c <= 0x1A1F

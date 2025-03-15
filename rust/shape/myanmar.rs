@@ -4,9 +4,10 @@
 // https://r12a.github.io/scripts/mymr/my.html
 // https://r12a.github.io/scripts/mymr/shn.html
 
-use crate::WHITESPACE;
+use crate::shape::*;
 use alloc::vec::Vec;
 
+/// Check if unicode character is Myanmar
 pub fn is_myanmar(c: &u16) -> bool {
     // main
     *c >= 0x1000 && *c <= 0x109F ||

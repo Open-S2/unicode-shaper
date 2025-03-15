@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 // Shape Arabic text on a character basis.
 //
 // <p>This function performs basic operations for "shaping" Arabic text. It is most
@@ -41,6 +42,7 @@
 // <p>For details about the available operations, see the description of the
 // <code>U_SHAPE_...</code> options.</p>
 
+/// List of White space characters
 pub const WHITESPACE: u16 = 0x0020 | // Space
     0x0009 | // Tab
     0x000A | // Line feed
@@ -57,13 +59,21 @@ pub const WHITESPACE: u16 = 0x0020 | // Space
 
 /// definitions for Arabic letter shaping -----------------------------------
 pub const IRRELEVANT: u16 = 4;
+/// LAMTYPE: 16
 pub const LAMTYPE: u16 = 16;
+/// ALEFTYPE: 32
 pub const ALEFTYPE: u16 = 32;
+/// LINK RIGHT
 pub const LINKR: u16 = 1;
+/// LINK LEFT
 pub const LINKL: u16 = 2;
+/// A PRESENT
 pub const APRESENT: u16 = 8;
+/// SHADDA CHAR
 pub const SHADDA: u16 = 64;
+/// C SHADDA
 pub const CSHADDA: u16 = 128;
+/// COMBINE
 pub const COMBINE: u16 = SHADDA + CSHADDA;
 
 pub const HAMZAFE_CHAR: u16 = 0xfe80;

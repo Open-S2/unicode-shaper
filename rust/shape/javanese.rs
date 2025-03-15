@@ -1,8 +1,10 @@
 // https://www.unicode.org/charts/PDF/UA980.pdf
 // https://r12a.github.io/scripts/java/jv.html
-use crate::WHITESPACE;
+
+use crate::shape::*;
 use alloc::vec::Vec;
 
+/// Check if a character is Javanese
 pub fn is_javanese(c: &u16) -> bool {
     // A980–A9DF
     *c >= 0xA980 && *c <= 0xA9DF

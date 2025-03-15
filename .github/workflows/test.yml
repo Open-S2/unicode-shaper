@@ -55,5 +55,6 @@ jobs:
 
     # Run tarpaulin to calculate and enforce coverage
     - name: Run Coverage and Enforce Threshold
-      run: cargo tarpaulin -p unicode-shaper
+      # cargo tarpaulin --fail-under 95
+      run: cargo tarpaulin
       shell: bash

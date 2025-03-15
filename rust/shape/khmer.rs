@@ -1,9 +1,10 @@
 // https://www.unicode.org/charts/PDF/U1780.pdf
 // https://r12a.github.io/scripts/khmr/km.html
 
-use crate::WHITESPACE;
+use crate::shape::*;
 use alloc::vec::Vec;
 
+/// Check if a character is Khmer
 pub fn is_khmer(c: &u16) -> bool {
     // 1780–17FF
     *c >= 0x1780 && *c <= 0x17FF

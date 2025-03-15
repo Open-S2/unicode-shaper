@@ -1,6 +1,6 @@
 // https://www.unicode.org/charts/PDF/U0600.pdf
 // https://r12a.github.io/scripts/arab/arb.html
-use crate::*;
+use crate::shape::*;
 use alloc::vec::Vec;
 use core::cmp::max;
 
@@ -776,6 +776,7 @@ fn _shape_arabic(
     // }
 }
 
+/// Shape Arabic text
 pub fn shape_arabic(input: &[u16], options: &u32) -> Vec<u16> {
     let mut source_ptr = input;
     let mut tempsource = Vec::<u16>::new();

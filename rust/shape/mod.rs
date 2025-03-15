@@ -1,21 +1,28 @@
+/// Arabic unicode shaping
 pub mod arabic;
+/// Buginese unicode shaping
 pub mod buginese;
 mod internal;
+/// Javanese unicode shaping
 pub mod javanese;
+/// Khmer unicode shaping
 pub mod khmer;
+/// Myanmar unicode shaping
 pub mod myanmar;
+/// Tibetan unicode shaping
 pub mod tibetan;
 
 use crate::*;
 use alloc::vec::Vec;
 pub use arabic::*;
 pub use buginese::*;
-pub use internal::*;
+use internal::*;
 pub use javanese::*;
 pub use khmer::*;
 pub use myanmar::*;
 pub use tibetan::*;
 
+/// Swaps characters in input with characters in comparitor. This is used for multiple languages
 pub fn shared_shaper(input: &mut [u16], comparitor: &[u16]) {
     for i in 0..input.len() {
         if i == 0 {
@@ -27,12 +34,13 @@ pub fn shared_shaper(input: &mut [u16], comparitor: &[u16]) {
     }
 }
 
+/// Shape Tamil unicode
 pub fn shape_tamil(input: &mut [u16]) {
     shared_shaper(input, &TAMIL_VOWELS);
 }
 
-// Converts an Arabic Unicode buffer in 06xx Range into a shaped
-// arabic Unicode buffer in FExx Range
+/// Converts an Arabic Unicode buffer in 06xx Range into a shaped
+/// arabic Unicode buffer in FExx Range
 pub fn shape_unicode(source: &[u16], options: &u32) -> Vec<u16> {
     let mut output = source.to_vec();
 

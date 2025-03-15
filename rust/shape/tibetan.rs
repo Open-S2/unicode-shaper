@@ -2,9 +2,10 @@
 // https://www.unicode.org/charts/PDF/U0F00.pdf
 // https://r12a.github.io/scripts/tibt/bo.html
 
-use crate::WHITESPACE;
+use crate::shape::*;
 use alloc::vec::Vec;
 
+/// Check if a character is Tibetan
 pub fn is_tibetan(c: &u16) -> bool {
     *c >= 0x0F00 && *c <= 0x0FFF
 }

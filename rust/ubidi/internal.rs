@@ -53,6 +53,8 @@ pub static MIRROR_CHAR: [[u16; 2]; 48] = [
 ];
 // 192 bytes
 
+/// Adjust string characters that have mirrored characters. Examples:
+/// '«', '»', '∕', '∟', '∠', '∡', '∢', '∤', '≃', '≅', '≌', '⊘', '⊦', '⊨',
 pub fn mirror_adjust_string(s: &mut [u16]) {
     for c in s {
         for from_to in MIRROR_CHAR {
@@ -114,6 +116,7 @@ pub static RAND_AL_CAT: [[u16; 2]; 45] = [
 ];
 // 168 bytes
 
+/// Check if a character is RandALCat (Right-to-left reading characters)
 pub fn is_rtl(c: &u16) -> bool {
     for arr in RAND_AL_CAT {
         if *c >= arr[0] && *c <= arr[1] {
@@ -266,6 +269,7 @@ pub static NEUTRAL: [[u16; 2]; 137] = [
 ];
 // 536 bytes
 
+/// Check if a character is NeutralCat (Neutral characters)
 pub fn is_neutral(c: &u16) -> bool {
     for arr in NEUTRAL {
         if *c >= arr[0] && *c <= arr[1] {
@@ -275,6 +279,7 @@ pub fn is_neutral(c: &u16) -> bool {
     false
 }
 
+/// List of WeakCat (Weak characters)
 pub static WEAK: [[u16; 2]; 228] = [
     [0x0000, 0x0008],
     [0x000E, 0x001B],
@@ -507,6 +512,7 @@ pub static WEAK: [[u16; 2]; 228] = [
 ];
 // 900 bytes
 
+/// Check if a character is WeakCat (Weak characters)
 pub fn is_weak(c: &u16) -> bool {
     for arr in WEAK {
         if *c >= arr[0] && *c <= arr[1] {
@@ -516,14 +522,20 @@ pub fn is_weak(c: &u16) -> bool {
     false
 }
 
+/// Text types
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub enum Type {
+    /// Right-to-left
     Rtl,
+    /// Weak (affected relative to the direction of text flow)
     Weak,
+    /// Neutral
     Neutral,
+    /// Left-to-right
     Ltr,
 }
 
+/// Get the type of a character
 pub fn get_type(c: &u16) -> Type {
     if is_rtl(c) {
         return Type::Rtl;
@@ -602,6 +614,7 @@ pub static CJK: [[u16; 2]; 14] = [
 ];
 // 56 bytes
 
+/// Check if a character is CJK (Chinese, Japanese, or Korean)
 pub fn is_cjk(c: &u16) -> bool {
     for arr in CJK {
         if *c >= arr[0] && *c <= arr[1] {
@@ -611,11 +624,9 @@ pub fn is_cjk(c: &u16) -> bool {
     false
 }
 
-pub static THAI_CHARS: [u16; 2] = [0xFE70, 0xFEFF];
-// 4 bytes
-
+/// Check if a character is Thai
 pub fn is_thai(c: &u16) -> bool {
-    *c >= THAI_CHARS[0] && *c <= THAI_CHARS[1]
+    *c >= 0xFE70 && *c <= 0xFEFF
 }
 
 #[cfg(test)]
