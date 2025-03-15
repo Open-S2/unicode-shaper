@@ -2,6 +2,8 @@
 pub mod arabic;
 /// Buginese unicode shaping
 pub mod buginese;
+/// CJK (Chinese, Japanese, or Korean) unicode shaping
+pub mod cjk;
 mod internal;
 /// Javanese unicode shaping
 pub mod javanese;
@@ -9,6 +11,11 @@ pub mod javanese;
 pub mod khmer;
 /// Myanmar unicode shaping
 pub mod myanmar;
+mod shared;
+/// Tamil unicode shaping
+pub mod tamil;
+/// Thai unicode shaping
+pub mod thai;
 /// Tibetan unicode shaping
 pub mod tibetan;
 
@@ -20,24 +27,8 @@ use internal::*;
 pub use javanese::*;
 pub use khmer::*;
 pub use myanmar::*;
+pub use tamil::*;
 pub use tibetan::*;
-
-/// Swaps characters in input with characters in comparitor. This is used for multiple languages
-pub fn shared_shaper(input: &mut [u16], comparitor: &[u16]) {
-    for i in 0..input.len() {
-        if i == 0 {
-            continue;
-        }
-        if comparitor.contains(&input[i]) {
-            input.swap(i - 1, i);
-        }
-    }
-}
-
-/// Shape Tamil unicode
-pub fn shape_tamil(input: &mut [u16]) {
-    shared_shaper(input, &TAMIL_VOWELS);
-}
 
 /// Converts an Arabic Unicode buffer in 06xx Range into a shaped
 /// arabic Unicode buffer in FExx Range
