@@ -23,6 +23,7 @@ use crate::*;
 use alloc::vec::Vec;
 pub use arabic::*;
 pub use buginese::*;
+pub use cjk::*;
 use internal::*;
 pub use javanese::*;
 pub use khmer::*;
