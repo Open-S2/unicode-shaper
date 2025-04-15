@@ -1,5 +1,5 @@
-import { TAMIL_VOWELS } from './internal';
-import { sharedShaper } from './shared';
+import { TAMIL_VOWELS } from './internal.js';
+import { sharedShaper } from './shared.js';
 
 /**
  * Check if a character is Tamil

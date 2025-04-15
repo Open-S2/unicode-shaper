@@ -2,10 +2,10 @@
 // https://www.unicode.org/charts/PDF/UA980.pdf
 // https://r12a.github.io/scripts/java/jv.html
 
-import { WHITESPACE } from '.';
-import { buildClusters, buildDefinitions, commonGetSorted } from './shared';
+import { WHITESPACE } from './index.js';
+import { buildClusters, buildDefinitions, commonGetSorted } from './shared.js';
 
-import type { Cluster } from './shared';
+import type { Cluster } from './shared.js';
 
 /**
  * Check if a character is a "Javanese" unicode character

@@ -1,10 +1,10 @@
 // https://www.unicode.org/charts/PDF/U1A00.pdf
 // https://r12a.github.io/scripts/bugi/bug.html
 
-import { WHITESPACE } from '.';
-import { buildClusters, buildDefinitions, commonGetSorted } from './shared';
+import { WHITESPACE } from './index.js';
+import { buildClusters, buildDefinitions, commonGetSorted } from './shared.js';
 
-import type { Cluster } from './shared';
+import type { Cluster } from './shared.js';
 
 /**
  * Check if a character is a "buginese" unicode character

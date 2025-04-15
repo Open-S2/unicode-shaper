@@ -1,5 +1,5 @@
-import { DEFAULT_OPTIONS } from './shape/internal';
-import wasmBase64 from './uShaper.wasm';
+import { DEFAULT_OPTIONS } from './shape/internal.js';
+import wasmBase64 from './uShaper.wasm.js';
 
 /** WASM Free Command */
 type WasmFree = (ptr: number, len: number) => void;

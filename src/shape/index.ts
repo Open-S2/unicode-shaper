@@ -1,23 +1,23 @@
-import { processBidiText } from '../ubidi';
-import { shapeArabic } from './arabic';
-import { shapeBuginese } from './buginese';
-import { shapeJavanese } from './javanese';
-import { shapeKhmer } from './khmer';
-import { shapeMyanmar } from './myanmar';
-import { shapeTamil } from './tamil';
-import { shapeTibetan } from './tibetan';
-import { U_SHAPE_DIRECTION_OUTPUT_BIDI, U_SHAPE_LETTERS_MASK } from './internal';
+import { processBidiText } from '../ubidi/index.js';
+import { shapeArabic } from './arabic.js';
+import { shapeBuginese } from './buginese.js';
+import { shapeJavanese } from './javanese.js';
+import { shapeKhmer } from './khmer.js';
+import { shapeMyanmar } from './myanmar.js';
+import { shapeTamil } from './tamil.js';
+import { shapeTibetan } from './tibetan.js';
+import { U_SHAPE_DIRECTION_OUTPUT_BIDI, U_SHAPE_LETTERS_MASK } from './internal.js';
 
-export * from './arabic';
-export * from './buginese';
-export * from './cjk';
-export * from './internal';
-export * from './javanese';
-export * from './khmer';
-export * from './myanmar';
-export * from './tamil';
-export * from './thai';
-export * from './tibetan';
+export * from './arabic.js';
+export * from './buginese.js';
+export * from './cjk.js';
+export * from './internal.js';
+export * from './javanese.js';
+export * from './khmer.js';
+export * from './myanmar.js';
+export * from './tamil.js';
+export * from './thai.js';
+export * from './tibetan.js';
 
 /**
  * Converts an Arabic Unicode buffer in 06xx Range into a shaped

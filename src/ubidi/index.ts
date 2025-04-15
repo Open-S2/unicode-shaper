@@ -1,6 +1,6 @@
-import { Type, findDominantType, getType, mirrorAdjustString } from './internal';
+import { Type, findDominantType, getType, mirrorAdjustString } from './internal.js';
 
-export * from './internal';
+export * from './internal.js';
 
 /** Basic Line tracker */
 interface Line {

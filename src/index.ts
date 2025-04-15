@@ -1,8 +1,8 @@
-import { DEFAULT_OPTIONS, shapeUnicode } from './shape';
+import { DEFAULT_OPTIONS, shapeUnicode } from './shape/index.js';
 
-export * from './shape';
-export * from './textShaperWasm';
-export * from './ubidi';
+export * from './shape/index.js';
+export * from './textShaperWasm.js';
+export * from './ubidi/index.js';
 
 /**
  * Converts a string into a shaped string

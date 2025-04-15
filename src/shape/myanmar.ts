@@ -4,10 +4,10 @@
 // https://r12a.github.io/scripts/mymr/my.html
 // https://r12a.github.io/scripts/mymr/shn.html
 
-import { WHITESPACE } from '.';
-import { buildClusters } from './shared';
+import { WHITESPACE } from './index.js';
+import { buildClusters } from './shared.js';
 
-import type { Cluster, Definition } from './shared';
+import type { Cluster, Definition } from './shared.js';
 
 /**
  * Check if a character is a "Myanmar" unicode character

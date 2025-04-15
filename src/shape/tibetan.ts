@@ -2,10 +2,10 @@
 // https://www.unicode.org/charts/PDF/U0F00.pdf
 // https://r12a.github.io/scripts/tibt/bo.html
 
-import { WHITESPACE } from '.';
-import { buildClusters } from './shared';
+import { WHITESPACE } from './index.js';
+import { buildClusters } from './shared.js';
 
-import type { Cluster, Definition } from './shared';
+import type { Cluster, Definition } from './shared.js';
 
 /**
  * Check if a character is Tibetan

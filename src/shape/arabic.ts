@@ -35,7 +35,7 @@ import {
   U_SHAPE_TEXT_DIRECTION_LOGICAL,
   U_SHAPE_TEXT_DIRECTION_MASK,
   U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
-} from './internal';
+} from './internal.js';
 
 /**
  * Check if a character is Arabic
