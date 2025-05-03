@@ -1,5 +1,7 @@
 #![no_std]
+#![cfg_attr(not(any(target_arch = "wasm32", feature = "wasm")), forbid(unsafe_code))]
 #![deny(missing_docs)]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 //! # Unicode Shaper
 //!
 //! ## Description
