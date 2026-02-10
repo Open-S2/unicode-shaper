@@ -145,6 +145,9 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
 
 /**
  * Shape/Reordering characters
+ *
+ * @param input - input unicode buffer to shape in place
+ *
  * The shaping engine inserts a placeholder glyph (U+25CC) wherever
  * combining marks occur without a valid base. The character U+25CC
  * belongs to the class of generic bases (GB). Well-formed Khmer
@@ -154,8 +157,8 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
  * 1) Consonant based syllables: Cons + {COENG + (Cons | IndV)} + [PreV | BlwV] + [RegShift] + [AbvV] + {AbvS} + [PstV] + [PstS]
  *
  * Ex. រាជធានីភ្នំពេញ
- * @param input - input unicode buffer to shape in place
  */
+// oxlint-disable-next-line jsdoc/require-param (false positive)
 export function shapeKhmer(input: number[]): void {
   const res: number[] = [];
   // Step 1: Convert input to clusters

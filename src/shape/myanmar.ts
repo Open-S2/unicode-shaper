@@ -125,6 +125,9 @@ function buildFromUnicodes(input: number[]): Definition<MType>[] {
 }
 
 /**
+ * @param cluster - cluster of definitions
+ * @returns reordered/sorted cluster
+ *
  * 1) Kinzi sequences (K) are reordered directly after the cluster base
  * 2) The medial ra (MR) is reordered before the base consonant
  * 3) Pre-base vowels (VPre) are reordered to the start of the syllable cluster.
@@ -132,8 +135,6 @@ function buildFromUnicodes(input: number[]): Definition<MType>[] {
  *    as a block to the beginning of the cluster.
  * 4) Anusvara (A) coming immediately after one or more below-base vowels (VBlw)
  *    will reorder immediately before them.
- * @param cluster - cluster of definitions
- * @returns - reordered/sorted cluster
  */
 function getSorted<T>(cluster: Cluster<T>): number[] {
   // sort
@@ -192,6 +193,9 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
 
 /**
  * Shape/Reordering characters
+ *
+ * @param input - input unicode buffer to be modified/shaped
+ *
  * Once the Myanmar shaping engine has analyzed the run as described above,
  * it creates a buffer of appropriately reordered elements (glyphs) representing the
  * cluster according to the rules given:
@@ -214,7 +218,6 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
  * I-EXPLAINED - ([K] 1004 103A 1039) - ([C] 1000) - ([H] 1039) - ([C] 1000) - ([MY] 103B) - ([MR] 103C) - ([MW] 103D) - ([VPre] 1031) - ([VPre] 1031) - ([VAbv] 102D) - ([VBlw] 102F) - ([A] 1036) - ([VPst] 102C) - ([A] 1036)
  * REORDERED - 1031 1031 103C 1000 1004 103A 1039 1039 1000 103B 103D 102D 1036 102F 102C 1036
  * R-EXPLAINED - ([VPre] 1031) - ([VPre] 1031) - ([MR] 103C) - ([C] 1000) - ([K] 1004 103A 1039) - ([H] 1039) - ([C] 1000) - ([MY] 103B) - ([MW] 103D) - ([VAbv] 102D) - ([A] 1036) - ([VPst] 102F) - ([VPst] 102C) - ([A] 1036)
- * @param input - input unicode buffer to be modified/shaped
  */
 export function shapeMyanmar(input: number[]): void {
   const res: number[] = [];

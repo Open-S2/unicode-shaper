@@ -9,7 +9,7 @@ import type { Cluster } from './shared.js';
 /**
  * Check if a character is a "buginese" unicode character
  * @param c - input unicode character
- * @returns - True if buginese
+ * @returns True if buginese
  */
 export function isBuginese(c: number): boolean {
   return c >= 0x1a00 && c <= 0x1a1f;
@@ -37,7 +37,7 @@ enum MType {
  * Find the type of a buginese character
  * NOTE: isSpecialSequence is for K, if true, '103A, 1039' come after c
  * @param c - input unicode character
- * @returns - The type of the character
+ * @returns The type of the character
  */
 function toMType(c: number): MType {
   // match c {
@@ -94,6 +94,9 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
 
 /**
  * Shape/Reordering characters
+ *
+ * @param input - array of unicode characters to be shaped in place if the input contains buginese
+ *
  * The shaping engine inserts a placeholder glyph (U+25CC) wherever
  * combining marks occur without a valid base. The character U+25CC
  * belongs to the class of generic bases (GB). Well-formed Buginese
@@ -104,7 +107,6 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
  * 2) Clusters:                       < C | GB > [VS] (VPre)* (VAbv)* (VBlv)* (VPst)* [J]
  *
  * Ex. ᨔᨗᨔᨗᨊᨗᨊ
- * @param input - array of unicode characters to be shaped in place if the input contains buginese
  */
 export function shapeBuginese(input: number[]): void {
   const res: number[] = [];

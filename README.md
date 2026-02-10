@@ -82,22 +82,22 @@ cargo add unicode-shaper
 ### Native typescript
 
 ```ts
-import { shapeString } from 'unicode-shaper'
-const text = 'سلام۳۹' // [1587, 1604, 1575, 1605, 1779, 1785]
-const output = shapeString(input)
-console.log(output) // [1779, 1785, 65249, 65276, 65203]
+import { shapeString } from 'unicode-shaper';
+const text = 'سلام۳۹'; // [1587, 1604, 1575, 1605, 1779, 1785]
+const output = shapeString(input);
+console.log(output); // [1779, 1785, 65249, 65276, 65203]
 // => '۳۹ﻡﻼﺳ'
 ```
 
 ### WASM Build
 
 ```ts
-    import { WasmTextShaper } from 'unicode-shaper'
-    const wasm = new WasmTextShaper()
-    const text = 'سلام۳۹' // [1587, 1604, 1575, 1605, 1779, 1785]
-    const output = wasm.processString(input)
-    console.log(output) // [1779, 1785, 65249, 65276, 65203]
-    // => '۳۹ﻡﻼﺳ'
+import { WasmTextShaper } from 'unicode-shaper';
+const wasm = new WasmTextShaper();
+const text = 'سلام۳۹'; // [1587, 1604, 1575, 1605, 1779, 1785]
+const output = wasm.processString(input);
+console.log(output); // [1779, 1785, 65249, 65276, 65203]
+// => '۳۹ﻡﻼﺳ'
 ```
 
 ## Prerequisites for Contributing

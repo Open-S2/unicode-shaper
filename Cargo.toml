@@ -1,6 +1,7 @@
 [package]
 name = "unicode-shaper"
 version = "0.3.0"
+rust-version = "1.91.0"
 edition = "2021"
 authors = ["Craig O'Connor <oconnorct1@gmail.com>"]
 description = "Shape unicode text so that renderers like WebGL and WebGPU can properly display the glyphs."

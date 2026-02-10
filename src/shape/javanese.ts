@@ -118,6 +118,9 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
 
 /**
  * Shape/Reordering characters
+ *
+ * @param input - input unicode buffer to shape in place
+ *
  * The shaping engine inserts a placeholder glyph (U+25CC) wherever
  * combining marks occur without a valid base. The character U+25CC
  * belongs to the class of generic bases (GB). Well-formed Javanese
@@ -129,7 +132,6 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
  * 3) Complex cluster:                < C | GB > [VS] [N] (H C [VS] [N]) [MCR] [MCY] (VPre) (VAbv) (VBlw) (M)*
  *
  * Ex. ꦧꦺꦲꦏ꧀ꦠꦸꦩꦿꦥ꧀ꦲ​
- * @param input - input unicode buffer to shape in place
  */
 export function shapeJavanese(input: number[]): void {
   const res: number[] = [];

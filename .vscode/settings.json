@@ -1,6 +1,13 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "rust-analyzer.linkedProjects": [
-        "./Cargo.toml"
-    ]
+  "rust-analyzer.linkedProjects": ["./Cargo.toml"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "oxc.fmt.configPath": ".oxfmtrc.json",
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  }
 }

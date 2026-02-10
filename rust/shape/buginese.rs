@@ -79,7 +79,7 @@ impl<'a> Definition<'a> {
         Self { m_type, code }
     }
 
-    fn build_definition(input: &[u16]) -> Vec<Definition> {
+    fn build_definition(input: &'_ [u16]) -> Vec<Definition<'_>> {
         let mut clusters = Vec::new();
 
         let mut idx: usize = 0;

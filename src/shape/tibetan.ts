@@ -111,6 +111,9 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
 
 /**
  * Shape/Reordering characters
+ *
+ * @param input - input unicode buffer to be modified/shaped
+ *
  * Once the Myanmar shaping engine has analyzed the run as described above,
  * it creates a buffer of appropriately reordered elements (glyphs) representing the
  * cluster according to the rules given:
@@ -128,7 +131,6 @@ function getSorted<T>(cluster: Cluster<T>): number[] {
  * 2) Digits: D [Md]
  *
  * Ex. བོད་རང་སྐྱོང་ལྗོངས།
- * @param input - input unicode buffer to be modified/shaped
  */
 export function shapeTibetan(input: number[]): void {
   const res: number[] = [];
